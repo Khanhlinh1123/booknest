@@ -21,7 +21,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -32,6 +32,8 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 
 Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('register', [RegisteredUserController::class, 'store']);
+
+Route::get('/danh-muc/{maDM}', [App\Http\Controllers\DanhMucController::class, 'show'])->name('danhmuc.show');
 
 
 require __DIR__.'/auth.php';

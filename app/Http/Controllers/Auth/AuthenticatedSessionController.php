@@ -26,29 +26,34 @@ class AuthenticatedSessionController extends Controller
 
     
 
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+     public function store(Request $request): RedirectResponse
+{
+    $request->validate([
+        'tenDangNhap' => ['required', 'string'],
+        'matKhau' => ['required', 'string'],
+    ]);
 
-        if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
-            $request->session()->regenerate();
+    $credentials = [
+        'tenDangNhap' => $request->tenDangNhap,
+        'password' => $request->matKhau,
+    ];
 
-            // ✅ Điều hướng: nếu là admin → dashboard, nếu không → trang chủ
-            if (Auth::user()->phanQuyen === 'admin') {
-                return redirect()->route('dashboard');
-            }
+    if (Auth::attempt($credentials, $request->filled('remember'))) {
+        $request->session()->regenerate();
 
-            return redirect()->route('home');
+        if (Auth::user()->phanQuyen === 'admin') {
+            return redirect()->route('dashboard');
         }
 
-        return back()->withErrors([
-            'email' => 'Tài khoản hoặc mật khẩu không đúng.',
-        ]);
+        return redirect()->route('home');
     }
-    
+
+    return back()->withErrors([
+        'tenDangNhap' => 'Tài khoản hoặc mật khẩu không đúng.',
+    ]);
+}
+
+     
 
     /**
      * Destroy an authenticated session.

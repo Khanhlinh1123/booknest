@@ -17,7 +17,7 @@ class DanhmucSach extends Model
     public function danhMuc() {
         return $this->belongsTo(DanhMuc::class, 'maDMS');
     }
-    public function sachsach() {
+    public function sach() {
         return $this->belongsTo(Sach::class, 'maSach');
     }
 }

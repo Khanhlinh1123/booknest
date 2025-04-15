@@ -15,7 +15,7 @@ return [
 
     'defaults' => [
         'guard' => 'web',
-        'passwords' => 'users',
+        'passwords' => 'nguoidungs',
     ],
 
     /*
@@ -38,7 +38,7 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'nguoidungs',
         ],
     ],
 
@@ -60,7 +60,7 @@ return [
     */
 
    'providers' => [
-    'users' => [
+    'nguoidungs' => [
         'driver' => 'eloquent',
         'model' => App\Models\NguoiDung::class,
          ],
@@ -87,8 +87,8 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
+        'nguoidungs' => [
+            'provider' => 'nguoidungs',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

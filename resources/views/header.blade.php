@@ -1,3 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Nơi những trang sách tìm về tổ ấm</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="author" content="">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link href="{{ asset('assets/bnhome/css/normalize.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/bnhome/icomoon/icomoon.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/bnhome/css/vendor.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/bnhome/style.css') }}" rel="stylesheet">
+
+
+</head>
+
 <div id="header-wrap">
 
 		<div class="top-content">
@@ -33,7 +57,7 @@
 
 					<div class="col-md-2">
 						<div class="main-logo">
-							<a href="index.html"><img src="{{ asset('assets/bnhome/images/logo.png') }}" alt="logo"></a>
+							<a href="/"><img src="{{ asset('assets/bnhome/images/logo.png') }}" alt="logo"></a>
 						</div>
 
 					</div>
@@ -48,7 +72,7 @@
 									<a href="#" class="nav-link">Danh mục</a>
 										<ul>
 										@foreach ($danhmucs as $dm)
-										<li><a href="{{ url('/danh-muc/' . $dm->maDM) }}">{{ $dm->tenDM }}</a></li>
+										<li><a href="{{ route('danhmuc.show', $dm->maDM) }}">{{ $dm->tenDM }}</a></li>
 										@endforeach
 										</ul>
 

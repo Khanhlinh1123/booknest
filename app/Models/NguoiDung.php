@@ -34,7 +34,10 @@ class NguoiDung extends Model implements AuthenticatableContract
     return $this->hasOne(GioHang::class, 'maND');
 }
 
-    
+    public function getAuthIdentifierName()
+    {
+        return 'tenDangNhap';
+    }
     public function getAuthPassword()
     {
         return $this->matKhau; 

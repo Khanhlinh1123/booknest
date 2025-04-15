@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -22,7 +23,6 @@ Route::middleware('guest')->group(function () {
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');
     
-    Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 

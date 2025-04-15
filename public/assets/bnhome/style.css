@@ -157,6 +157,54 @@ a {
   --bs-list-group-border-width: 0;
 }
 
+.category-list {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.category-title {
+    background-color: #a47148; /* Nâu nhạt */
+    color: white;
+    padding: 10px 12px;
+    font-size: 15px;
+    margin: 0;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+}
+
+.category-list ul {
+    padding: 10px 12px;
+    margin: 0;
+}
+
+.category-list li {
+    margin-bottom: 4px;
+}
+
+.category-list a {
+    display: block;
+    padding: 4px 8px;
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.category-list a:hover {
+    background-color: #f5f5f5;
+}
+
+.category-list a.active {
+    font-weight: bold;
+    color: #a47148;
+}
+
+
+
+
 /* btn */
 .btn {
   --bs-btn-border-radius: 0;
