@@ -36,7 +36,7 @@ class NguoiDung extends Model implements AuthenticatableContract
 
     public function getAuthIdentifierName()
     {
-        return 'tenDangNhap';
+        return 'maND';
     }
     public function getAuthPassword()
     {

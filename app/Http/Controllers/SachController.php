@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Sach;
 
 class SachController extends Controller
 {
@@ -33,9 +34,10 @@ class SachController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $sach = Sach::with(['tacGia', 'nhaXuatBan', 'khuyenMai'])->findOrFail($id);
+        return view('sach.show', compact('sach'));
     }
 
     /**

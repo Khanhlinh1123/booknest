@@ -42,10 +42,18 @@ class Sach extends Model
     public function gioHangs() {
         return $this->belongsToMany(GioHang::class, 'giohang_sach', 'maSach', 'maGH');
     }
-    public function donHangs() {
-        return $this->belongsToMany(DonHang::class, 'donhang_sach', 'maSach', 'maDH');
+    public function donHangs()
+    {
+        return $this->belongsToMany(DonHang::class, 'chitietdonhang', 'maSach', 'maDH')->withPivot('soLuong');
     }
-
+    public function soLuongDaBan()
+    {
+        return $this->donHangs()->sum('chitietdonhangchitietdonhang.soLuong');
+    }
+    public function getSoLuongDaBanAttribute()
+    {
+        return $this->donHangs()->sum('chitietdonhang.soLuong');
+    }
 
     public function nhaXuatBan() {
         return $this->belongsTo(Nhaxuatban::class, 'maNXB');
