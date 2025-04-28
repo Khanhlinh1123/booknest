@@ -133,7 +133,7 @@
     </div>
 
     <!-- Giỏ hàng -->
-    <a href="#" class="cart for-buy"><i class="icon icon-clipboard"></i></a>
+    <a href="{{ route('giohang.hienthi') }}" class="cart for-buy"><i class="icon icon-clipboard"></i></a>
 </div>
 					
 				</div>

@@ -91,4 +91,86 @@ public function hienThiGioHang()
 
     return view('giohang.show', compact('items'));
 }
+
+ // API tăng số lượng
+public function apiTang(Request $request)
+{
+    $maSach = $request->input('maSach');
+
+    if (Auth::check()) {
+        $user = Auth::user();
+        $gioHang = GioHang::firstOrCreate(['maND' => $user->maND]);
+
+        DB::table('giohang_sach')
+            ->where('maGH', $gioHang->maGH)
+            ->where('maSach', $maSach)
+            ->increment('soLuong', 1);
+    } else {
+        $cart = session('cart', []);
+        $cart[$maSach] = ($cart[$maSach] ?? 0) + 1;
+        session(['cart' => $cart]);
+    }
+
+    return response()->json(['success' => true]);
+}
+
+// API giảm số lượng
+public function apiGiam(Request $request)
+{
+    $maSach = $request->input('maSach');
+
+    if (Auth::check()) {
+        $user = Auth::user();
+        $gioHang = GioHang::firstOrCreate(['maND' => $user->maND]);
+
+        DB::table('giohang_sach')
+            ->where('maGH', $gioHang->maGH)
+            ->where('maSach', $maSach)
+            ->decrement('soLuong', 1);
+
+        // Nếu <= 0 thì xóa
+        DB::table('giohang_sach')
+            ->where('maGH', $gioHang->maGH)
+            ->where('maSach', $maSach)
+            ->where('soLuong', '<=', 0)
+            ->delete();
+    } else {
+        $cart = session('cart', []);
+        if (isset($cart[$maSach])) {
+            $cart[$maSach]--;
+            if ($cart[$maSach] <= 0) {
+                unset($cart[$maSach]);
+            }
+            session(['cart' => $cart]);
+        }
+    }
+
+    return response()->json(['success' => true]);
+}
+
+// API xóa sản phẩm
+public function apiXoa(Request $request)
+{
+    $maSach = $request->input('maSach');
+
+    if (Auth::check()) {
+        $user = Auth::user();
+        $gioHang = GioHang::firstOrCreate(['maND' => $user->maND]);
+
+        DB::table('giohang_sach')
+            ->where('maGH', $gioHang->maGH)
+            ->where('maSach', $maSach)
+            ->delete();
+    } else {
+        $cart = session('cart', []);
+        if (isset($cart[$maSach])) {
+            unset($cart[$maSach]);
+            session(['cart' => $cart]);
+        }
+    }
+
+    return response()->json(['success' => true]);
+}
+
+
 }
