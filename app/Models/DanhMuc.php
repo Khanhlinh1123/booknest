@@ -15,7 +15,7 @@ class DanhMuc extends Model
     protected $fillable = ['tenDM'];
 
     public function sachs()
-{
-    return $this->belongsToMany(Sach::class, 'danhmuc_sach', 'maDM', 'maSach');
-}
+    {
+        return $this->hasMany(Sach::class, 'maDM', 'maDM');
+    }
 }

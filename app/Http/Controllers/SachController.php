@@ -48,6 +48,26 @@ class SachController extends Controller
         //
     }
 
+    public function goiYSach(Request $request)
+    {
+        $keyword = $request->keyword;
+
+        $sach = Sach::where('tenSach', 'like', '%' . $keyword . '%')
+                    ->select('maSach', 'tenSach')
+                    ->take(5)
+                    ->get();
+
+        return response()->json($sach);
+    }
+
+    public function timKiem(Request $request)
+{
+    $keyword = $request->input('tuKhoa');
+    $sachs = \App\Models\Sach::where('tenSach', 'like', '%' . $keyword . '%')->get();
+
+    return view('timkiem.ketqua', compact('sachs', 'keyword'));
+}
+
     /**
      * Update the specified resource in storage.
      */

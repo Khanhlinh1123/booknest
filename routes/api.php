@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use App\Models\Sach;
+
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

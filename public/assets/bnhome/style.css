@@ -1693,7 +1693,14 @@ button {
     width: 30%;
   }
 }
-
+@media (min-width: 768px) {
+  .col-md-2-4 {
+      width: 20%;
+      float: left;
+      padding-left: 15px;
+      padding-right: 15px;
+  }
+}
 @media screen and (max-width: 999px) {
 
   .section-header .section-title:before,
@@ -2447,6 +2454,27 @@ footer#footer {
 .product-style:hover button.add-to-cart {
   bottom: 380px;
   bottom: 0;
+}
+
+.product-item {
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+  height: 100%;
+}
+
+.product-item:hover {
+  transform: translateY(-5px);
+}
+
+.product-style img.product-item {
+  padding: 0;
+  border: none;
+  height: 250px;
+  object-fit: cover;
 }
 
 .product-item figcaption {

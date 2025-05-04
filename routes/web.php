@@ -55,5 +55,7 @@ Route::post('/gio-hang/api-xoa', [GioHangController::class, 'apiXoa']);
 // Route::get('/thong-tin-ca-nhan/lich-su-mua-hang/{id}', [App\Http\Controllers\LichSuMuaHangController::class, 'show'])->name('lichsumuahang.show');
 // Route::get('/thong-tin-ca-nhan/lich-su-mua-hang/{id}/chi-tiet', [App\Http\Controllers\LichSuMuaHangController::class, 'showChiTiet'])->name('lichsumuahang.chitiet');
 // Route::get('/thong-tin-ca-nhan/lich-su-mua-hang/{id}/chi-tiet/xoa', [App\Http\Controllers\LichSuMuaHangController::class, 'destroy'])->name('lichsumuahang.chitiet.xoa');
+Route::get('/tim-kiem', [App\Http\Controllers\HomeController::class, 'timKiem'])->name('timkiem');
+Route::get('/api/sach-search', [App\Http\Controllers\HomeController::class, 'apiTimKiem']);
 
 require __DIR__.'/auth.php';

@@ -36,8 +36,9 @@ class Sach extends Model
     public function tacGia() {
         return $this->belongsTo(TacGia::class, 'maTG');
     }
-    public function danhMucs() {
-        return $this->belongsToMany(DanhMuc::class, 'danhmuc_sach', 'maSach', 'maDM');
+    public function danhmuc()
+    {
+        return $this->belongsTo(DanhMuc::class, 'maDM', 'maDM');
     }
     public function gioHangs() {
         return $this->belongsToMany(GioHang::class, 'giohang_sach', 'maSach', 'maGH');

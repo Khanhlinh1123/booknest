@@ -1,88 +1,51 @@
 @include('header')
 
-    <style>
-          .category-list {
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                padding: 0;
-                background-color: #fff;
-                overflow: hidden;
-            }
+<style>
+    .sort-bar a {
+        border-radius: 20px;
+        padding: 6px 14px;
+        font-size: 13px;
+        transition: all 0.3s ease;
+    }
 
-            .category-title {
-                background-color: #a47148; 
-                color: white;
-                padding: 10px 12px;
-                font-size: 15px;
-                margin: 0;
-                font-weight: bold;
-                border-bottom: 1px solid #ccc;
-            }
+    .sort-bar a:hover {
+        background-color: #a47148;
+        color: #fff !important;
+        border-color: #a47148;
+    }
 
-            .category-list ul {
-                padding: 10px 12px;
-                margin: 0;
-            }
+    .product-item {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        transition: 0.3s;
+    }
 
-            .category-list li {
-                margin-bottom: 4px;
-            }
+    .product-item:hover {
+        box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        transform: translateY(-4px);
+    }
 
-            .category-list a {
-                display: block;
-                padding: 4px 8px;
-                font-size: 14px;
-                color: #333;
-                text-decoration: none;
-                border-radius: 4px;
-            }
+    .product-style img {
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
 
-            .category-list a:hover {
-                background-color: #f5f5f5;
-            }
+    .add-to-cart {
+        background-color: #a47148;
+        border: none;
+        padding: 6px 10px;
+        font-size: 13px;
+        color: white;
+        border-radius: 5px;
+        margin-top: 5px;
+    }
 
-            .category-list a.active {
-                font-weight: bold;
-                color: #a47148;
-            }
-            .filter-box {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px 12px;
-    background-color: #fff;
-    margin-bottom: 16px;
-}
+    .add-to-cart:hover {
+        background-color: #8d5c3c;
+    }
+</style>
 
-.filter-title {
-    background-color: #a47148; 
-    color: white;
-    padding: 6px 10px;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-
-.filter-box ul li {
-    margin-bottom: 6px;
-}
-
-.filter-box ul li a {
-    font-size: 13px;
-    color: #333;
-    text-decoration: none;
-    display: block;
-    padding: 4px 6px;
-    border-radius: 4px;
-}
-
-.filter-box ul li a:hover {
-    background-color: #f2f2f2;
-    color: #a47148;
-}
-
-
-      </style>
 
 <div class="container my-5">
     <div class="row">
@@ -135,6 +98,28 @@
         <!-- SẢN PHẨM  -->
         <div class="col-md-8">
             <h2 class="mb-4">Sách thuộc danh mục: {{ $danhmuc->tenDM }}</h2>
+            <div class="sort-bar mb-4 d-flex flex-wrap align-items-center gap-2">
+    <span class="me-2 fw-semibold">Sắp xếp theo:</span>
+    @php
+    $sortOptions = [
+        'default' => 'Mặc định',
+        'newest' => 'Sách mới',
+        'price_asc' => 'Giá thấp - cao',
+        'price_desc' => 'Giá cao - thấp',
+    ];
+    $currentSort = request()->query('sort', 'default'); // lấy từ URL
+@endphp
+
+@foreach ($sortOptions as $key => $label)
+    <a href="{{ request()->fullUrlWithQuery(['sort' => $key]) }}"
+       class="btn btn-sm {{ $currentSort === $key ? 'btn-dark text-white' : 'btn-outline-secondary' }}">
+        {{ $label }}
+    </a>
+@endforeach
+
+
+</div>
+
             <div class="row">
             @forelse($sachs as $sach)
                 <div class="col-md-4 mb-4">
@@ -144,8 +129,12 @@
                                 <img src="{{ asset('images/sach/' . $sach->hinhanh) }}" alt="{{ $sach->tenSach }}"
                                     class="img-fluid" style="height: 250px; object-fit: cover;">
                             </a>
-                            <button type="button" class="add-to-cart mt-2 btn btn-outline-dark btn-sm w-100">Thêm vào giỏ</button>
-                        </figure>
+                            <form action="{{ route('giohang.them') }}" method="POST" style="display: inline;">
+										@csrf
+										<input type="hidden" name="maSach" value="{{ $sach->maSach }}">
+										<input type="hidden" name="soLuong" value="1">
+										<button type="submit" class="add-to-cart" data-product-tile="add-to-cart">Thêm vào giỏ</button>
+									</form>                        </figure>
                         <figcaption>
                             <h6>
                                 <a href="{{ route('sach.show', $sach->maSach) }}" class="text-decoration-none text-dark">
@@ -170,6 +159,9 @@
 
             </div>
         </div>
+        <div class="d-flex justify-content-center">
+    {{ $sachs->links() }}
+</div>
     </div>
 </div>
 

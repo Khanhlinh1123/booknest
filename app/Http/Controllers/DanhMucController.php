@@ -13,39 +13,68 @@ class DanhMucController extends Controller
     {
         $danhmuc = DanhMuc::findOrFail($id);
         $danhmucs = DanhMuc::all(); // cho menu bên trái
-    
-        // Lấy query sẵn để áp dụng filter
+
+        $priceRanges = [
+            ['value' => '0-100000', 'label' => 'Dưới 100.000₫'],
+            ['value' => '100000-200000', 'label' => '100.000₫ – 200.000₫'],
+            ['value' => '200000-300000', 'label' => '200.000₫ – 300.000₫'],
+            ['value' => '300000-10000000', 'label' => 'Trên 300.000₫'],
+        ];
+
         $query = $danhmuc->sachs()->with('tacGia');
-    
-        // Lọc khoảng giá nếu có
+        switch ($request->sort) {
+            case 'newest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            
+            default:
+                $query->orderBy('maSach', 'asc'); // mặc định
+                break;
+        }
+        
+
         if ($request->has('price')) {
-            $priceRanges = $request->price;
-            $query->where(function ($q) use ($priceRanges) {
-                foreach ($priceRanges as $range) {
-                    [$min, $max] = explode('-', str_replace('+', '-999999999', $range));
+            $priceFilters = $request->price;
+            $query->where(function ($q) use ($priceFilters) {
+                foreach ($priceFilters as $range) {
+                    [$min, $max] = explode('-', str_replace('+', '-10000000', $range));
                     $q->orWhereBetween('giaGoc', [(int)$min, (int)$max]);
                 }
             });
         }
-    
-        // Lọc tác giả nếu có
+
         if ($request->has('author')) {
             $query->whereHas('tacGia', function ($q) use ($request) {
                 $q->whereIn('tenTG', $request->author);
             });
         }
-    
+
         $sachs = $query->get();
-    
-        // Gửi dữ liệu danh sách tác giả và khoảng giá về view
+
+if ($request->sort === 'price_asc') {
+    $sachs = $sachs->sortBy(function ($sach) {
+        return $sach->giaDaGiam;
+    });
+} elseif ($request->sort === 'price_desc') {
+    $sachs = $sachs->sortByDesc(function ($sach) {
+        return $sach->giaDaGiam;
+    });
+}
+
+// Phân trang thủ công sau khi sort
+$page = request()->get('page', 1);
+$perPage = 9;
+$sachs = new \Illuminate\Pagination\LengthAwarePaginator(
+    $sachs->forPage($page, $perPage),
+    $sachs->count(),
+    $perPage,
+    $page,
+    ['path' => request()->url(), 'query' => request()->query()]
+);
+
+
         $authors = $danhmuc->sachs->pluck('tacGia.tenTG')->filter()->unique()->values();
-        $priceRanges = [
-            ['value' => '0-100000', 'label' => 'Dưới 100.000₫'],
-            ['value' => '100000-200000', 'label' => '100.000₫ – 200.000₫'],
-            ['value' => '200000-300000', 'label' => '200.000₫ – 300.000₫'],
-            ['value' => '300000+', 'label' => 'Trên 300.000₫'],
-        ];
-    
+
         return view('danhmuc.show', compact('danhmuc', 'danhmucs', 'sachs', 'authors', 'priceRanges'));
     }
     
