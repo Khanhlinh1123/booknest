@@ -1,7 +1,51 @@
 @include('header')
 
+<style>
+#cart-table {
+    table-layout: fixed; /* Đảm bảo bảng sử dụng chiều rộng cố định */
+    width: 100%; /* Bảng chiếm toàn bộ chiều rộng container */
+}
+
+#cart-table th, #cart-table td {
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+    text-align: center; /* Căn giữa nội dung */
+    padding: 10px; /* Khoảng cách trong ô */
+}
+
+#cart-table td:first-child {
+    text-align: left; /* Căn trái cho cột "Thông tin sản phẩm" */
+    
+}
+
+#cart-table th:nth-child(1), #cart-table td:nth-child(1) {
+    width: 45%; /* Cột "Thông tin sản phẩm" */
+}
+
+#cart-table th:nth-child(2), #cart-table td:nth-child(2) {
+    width: 15%; /* Cột "Đơn giá" */
+}
+
+#cart-table th:nth-child(3), #cart-table td:nth-child(3) {
+    width: 15%; /* Cột "Số lượng" */
+}
+
+#cart-table th:nth-child(4), #cart-table td:nth-child(4) {
+    width: 15%; /* Cột "Thành tiền" */
+}
+
+#cart-table th:nth-child(5), #cart-table td:nth-child(5) {
+    width: 15%; /* Cột "Thao tác" */
+}
+
+#cart-table td img {
+    max-width: 70px; /* Giới hạn kích thước hình ảnh */
+    height: auto;
+}
+
+</style>
+
 <div class="container my-5">
-    <h2 class="mb-4" style="color: #2e8b57;">🛒 Giỏ Hàng Của Bạn</h2>
+    <h2 class="mb-4" style="color: #2e8b57;">🛒 Giỏ hàng của bạn</h2>
 
     @if ($items->count() > 0)
         <div class="table-responsive bg-white p-3 rounded shadow-sm">

@@ -101,7 +101,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="btn-wrap align-right">
-					<a href="#" class="btn-accent-arrow">Xem tất cả sách <i class="icon icon-ns-arrow-right"></i></a>
+					<a href="{{ route('sach.new') }}" class="btn-accent-arrow">Xem tất cả sách <i class="icon icon-ns-arrow-right"></i></a>
 				</div>
 			</div>
 		</div>
@@ -139,7 +139,7 @@
 			<div class="row">
 			<div class="col-md-12">
 				<div class="btn-wrap align-right">
-					<a href="#" class="btn-accent-arrow">Xem tất cả tác giả <i class="icon icon-ns-arrow-right"></i></a>
+					<a href="{{ route('tacgia.show') }}" class="btn-accent-arrow">Xem tất cả tác giả <i class="icon icon-ns-arrow-right"></i></a>
 				</div>
 			</div>
 		</div>
@@ -148,49 +148,7 @@
 </section>
 
 
-	<section id="best-selling" class="leaf-pattern-overlay">
-		<div class="corner-pattern-overlay"></div>
-		<div class="container">
-			<div class="row justify-content-center">
-
-				<div class="col-md-8">
-
-					<div class="row">
-
-						<div class="col-md-6">
-							<figure class="products-thumb">
-								<img src="{{ asset('images/booknest.jpg')  }}" alt="book" class="single-image">
-							</figure>
-						</div>
-
-						<div class="col-md-6">
-							<div class="product-entry">
-								<h2 class="section-title divider">Về BookNest</h2>
-
-								<div class="products-content">
-									<div class="author-name">By BookNest</div>
-									<h3 class="item-title">Nơi những trang sách tìm về tổ ấm.</h3>
-									<p>Booknest là không gian của những người yêu sách chân thành.
-Tại đây, mỗi cuốn sách không chỉ là món quà tri thức mà còn là nhịp cầu kết nối tâm hồn, cảm xúc và câu chuyện đời thường. Chúng tôi chọn lọc kỹ lưỡng từng tựa sách, nâng niu từng bìa sách như nâng niu một người bạn đồng hành.
-Dù bạn là người mê văn học, say mê triết lý hay đang kiếm tìm một chút dịu dàng giữa dòng đời – Booknest luôn có một góc dành riêng cho bạn.</p>
-									<div class="btn-wrap">
-										<a href="#" class="btn-accent-arrow">Xem thêm <i
-												class="icon icon-ns-arrow-right"></i></a>
-									</div>
-								</div>
-
-							</div>
-						</div>
-
-					</div>
-					<!-- / row -->
-
-				</div>
-
-			</div>
-		</div>
-	</section>
-
+	
 	
 
 	<section id="quotation" class="align-center pb-5 mb-5">
@@ -203,7 +161,7 @@ Dù bạn là người mê văn học, say mê triết lý hay đang kiếm tìm
 		</div>
 	</section>
 
-	<section id="special-offer" class="bookshelf pb-5 mb-5">
+	<!-- <section id="special-offer" class="bookshelf pb-5 mb-5">
 
 		<div class="section-header align-center">
 			<div class="title">
@@ -294,6 +252,108 @@ Dù bạn là người mê văn học, say mê triết lý hay đang kiếm tìm
 				</div><!--inner-content-->
 			</div>
 		</div>
+	</section> -->
+
+	<section id="latest-blog" class="py-5 my-5">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+
+					<div class="section-header align-center">
+						<div class="title">
+							<span>Xem bài viết</span>
+						</div>
+						<h2 class="section-title">Bài viết gần đây</h2>
+					</div>
+
+					<div class="row">
+					@foreach ($top3BaiViet as $bv)
+						<div class="col-md-4">
+							<article class="column" data-aos="fade-up">
+								<figure>
+									<a href="#" class="image-hvr-effect">
+									<img src="{{ asset($bv->anhBia ?? 'images/default.jpg') }}" alt="post" class="post-image">
+									</a>
+								</figure>
+								<div class="post-item">
+									<div class="meta-date">{{ \Carbon\Carbon::parse($bv->created_at)->format('M d, Y') }}</div>
+									<h3><a href="#">{{ \Str::limit(strip_tags($bv->tieuDe), 50) }}</a></h3>
+
+									<div class="links-element">
+										<div class="categories">{{ $bv->nguoiDung->tenND ?? 'Ẩn danh' }}</div>
+										<div class="social-links">
+											<ul>
+												<li><a href="#"><i class="icon icon-facebook"></i></a></li>
+												<li><a href="#"><i class="icon icon-twitter"></i></a></li>
+												<li><a href="#"><i class="icon icon-behance-square"></i></a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</article>
+						</div>
+						@endforeach
+
+						
+
+					</div>
+
+
+					<div class="row">
+
+						<div class="btn-wrap align-center">
+							<a href="#" class="btn btn-outline-accent btn-accent-arrow" tabindex="0">Xem tất cả bài viết<i
+									class="icon icon-ns-arrow-right"></i></a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<section id="best-selling" class="leaf-pattern-overlay">
+		<div class="corner-pattern-overlay"></div>
+		<div class="container">
+			<div class="row justify-content-center">
+
+				<div class="col-md-8">
+
+					<div class="row">
+
+						<div class="col-md-6">
+							<figure class="products-thumb">
+								<img src="{{ asset('images/booknest.jpg')  }}" alt="book" class="single-image">
+							</figure>
+						</div>
+
+						<div class="col-md-6">
+							<div class="product-entry">
+								<h2 class="section-title divider">Về BookNest</h2>
+
+								<div class="products-content">
+									<div class="author-name">By BookNest</div>
+									<h3 class="item-title">Nơi những trang sách tìm về tổ ấm.</h3>
+									<p>Booknest là không gian của những người yêu sách chân thành.
+Tại đây, mỗi cuốn sách không chỉ là món quà tri thức mà còn là nhịp cầu kết nối tâm hồn, cảm xúc và câu chuyện đời thường. Chúng tôi chọn lọc kỹ lưỡng từng tựa sách, nâng niu từng bìa sách như nâng niu một người bạn đồng hành.
+Dù bạn là người mê văn học, say mê triết lý hay đang kiếm tìm một chút dịu dàng giữa dòng đời – Booknest luôn có một góc dành riêng cho bạn.</p>
+									<div class="btn-wrap">
+										<a href="#" class="btn-accent-arrow">Xem thêm <i
+												class="icon icon-ns-arrow-right"></i></a>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+					<!-- / row -->
+
+				</div>
+
+			</div>
+		</div>
 	</section>
 
 	<section id="subscribe">
@@ -333,293 +393,16 @@ Dù bạn là người mê văn học, say mê triết lý hay đang kiếm tìm
 		</div>
 	</section>
 
-	<section id="latest-blog" class="py-5 my-5">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-
-					<div class="section-header align-center">
-						<div class="title">
-							<span>Read our articles</span>
-						</div>
-						<h2 class="section-title">Latest Articles</h2>
-					</div>
-
-					<div class="row">
-
-						<div class="col-md-4">
-
-							<article class="column" data-aos="fade-up">
-
-								<figure>
-									<a href="#" class="image-hvr-effect">
-										<img src="images/post-img1.jpg" alt="post" class="post-image">
-									</a>
-								</figure>
-
-								<div class="post-item">
-									<div class="meta-date">Mar 30, 2021</div>
-									<h3><a href="#">Reading books always makes the moments happy</a></h3>
-
-									<div class="links-element">
-										<div class="categories">inspiration</div>
-										<div class="social-links">
-											<ul>
-												<li>
-													<a href="#"><i class="icon icon-facebook"></i></a>
-												</li>
-												<li>
-													<a href="#"><i class="icon icon-twitter"></i></a>
-												</li>
-												<li>
-													<a href="#"><i class="icon icon-behance-square"></i></a>
-												</li>
-											</ul>
-										</div>
-									</div><!--links-element-->
-
-								</div>
-							</article>
-
-						</div>
-						<div class="col-md-4">
-
-							<article class="column" data-aos="fade-up" data-aos-delay="200">
-								<figure>
-									<a href="#" class="image-hvr-effect">
-										<img src="images/post-img2.jpg" alt="post" class="post-image">
-									</a>
-								</figure>
-								<div class="post-item">
-									<div class="meta-date">Mar 29, 2021</div>
-									<h3><a href="#">Reading books always makes the moments happy</a></h3>
-
-									<div class="links-element">
-										<div class="categories">inspiration</div>
-										<div class="social-links">
-											<ul>
-												<li>
-													<a href="#"><i class="icon icon-facebook"></i></a>
-												</li>
-												<li>
-													<a href="#"><i class="icon icon-twitter"></i></a>
-												</li>
-												<li>
-													<a href="#"><i class="icon icon-behance-square"></i></a>
-												</li>
-											</ul>
-										</div>
-									</div><!--links-element-->
-
-								</div>
-							</article>
-
-						</div>
-						<div class="col-md-4">
-
-							<article class="column" data-aos="fade-up" data-aos-delay="400">
-								<figure>
-									<a href="#" class="image-hvr-effect">
-										<img src="images/post-img3.jpg" alt="post" class="post-image">
-									</a>
-								</figure>
-								<div class="post-item">
-									<div class="meta-date">Feb 27, 2021</div>
-									<h3><a href="#">Reading books always makes the moments happy</a></h3>
-
-									<div class="links-element">
-										<div class="categories">inspiration</div>
-										<div class="social-links">
-											<ul>
-												<li>
-													<a href="#"><i class="icon icon-facebook"></i></a>
-												</li>
-												<li>
-													<a href="#"><i class="icon icon-twitter"></i></a>
-												</li>
-												<li>
-													<a href="#"><i class="icon icon-behance-square"></i></a>
-												</li>
-											</ul>
-										</div>
-									</div><!--links-element-->
-
-								</div>
-							</article>
-
-						</div>
-
-					</div>
-
-					<div class="row">
-
-						<div class="btn-wrap align-center">
-							<a href="#" class="btn btn-outline-accent btn-accent-arrow" tabindex="0">Read All Articles<i
-									class="icon icon-ns-arrow-right"></i></a>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-	</section>
+	
 
 
 
-	<footer id="footer">
-		<div class="container">
-			<div class="row">
+	
+@include( 'footer');
 
-				<div class="col-md-4">
-
-					<div class="footer-item">
-						<div class="company-brand">
-							<img src="images/main-logo.png" alt="logo" class="footer-logo">
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sagittis sed ptibus liberolectus
-								nonet psryroin. Amet sed lorem posuere sit iaculis amet, ac urna. Adipiscing fames
-								semper erat ac in suspendisse iaculis.</p>
-						</div>
-					</div>
-
-				</div>
-
-				<div class="col-md-2">
-
-					<div class="footer-menu">
-						<h5>About Us</h5>
-						<ul class="menu-list">
-							<li class="menu-item">
-								<a href="#">vision</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">articles </a>
-							</li>
-							<li class="menu-item">
-								<a href="#">careers</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">service terms</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">donate</a>
-							</li>
-						</ul>
-					</div>
-
-				</div>
-				<div class="col-md-2">
-
-					<div class="footer-menu">
-						<h5>Discover</h5>
-						<ul class="menu-list">
-							<li class="menu-item">
-								<a href="#">Home</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Books</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Authors</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Subjects</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Advanced Search</a>
-							</li>
-						</ul>
-					</div>
-
-				</div>
-				<div class="col-md-2">
-
-					<div class="footer-menu">
-						<h5>My account</h5>
-						<ul class="menu-list">
-							<li class="menu-item">
-								<a href="#">Sign In</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">View Cart</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">My Wishtlist</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Track My Order</a>
-							</li>
-						</ul>
-					</div>
-
-				</div>
-				<div class="col-md-2">
-
-					<div class="footer-menu">
-						<h5>Help</h5>
-						<ul class="menu-list">
-							<li class="menu-item">
-								<a href="#">Help center</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Report a problem</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Suggesting edits</a>
-							</li>
-							<li class="menu-item">
-								<a href="#">Contact us</a>
-							</li>
-						</ul>
-					</div>
-
-				</div>
-
-			</div>
-			<!-- / row -->
-
-		</div>
-	</footer>
-
-	<div id="footer-bottom">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-
-					<div class="copyright">
-						<div class="row">
-
-							<div class="col-md-6">
-								<p>© 2022 All rights reserved. Free HTML Template by <a
-										href="https://www.templatesjungle.com/" target="_blank">TemplatesJungle</a></p>
-							</div>
-
-							<div class="col-md-6">
-								<div class="social-links align-right">
-									<ul>
-										<li>
-											<a href="#"><i class="icon icon-facebook"></i></a>
-										</li>
-										<li>
-											<a href="#"><i class="icon icon-twitter"></i></a>
-										</li>
-										<li>
-											<a href="#"><i class="icon icon-youtube-play"></i></a>
-										</li>
-										<li>
-											<a href="#"><i class="icon icon-behance-square"></i></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-
-						</div>
-					</div><!--grid-->
-
-				</div><!--footer-bottom-content-->
-			</div>
-		</div>
-	</div>
-
+	<!-- JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-7+Q2j6g4v
 	
 
 </body>

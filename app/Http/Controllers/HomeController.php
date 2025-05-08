@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\DanhMuc;
 use App\Models\Sach;
 use App\Models\TacGia;
+use App\Models\BaiViet;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -15,9 +16,11 @@ class HomeController extends Controller
 public function index() {
     $danhmucs = DanhMuc::orderBy('tenDM')->get();
     $sachMoi = Sach::with('khuyenMai')->orderBy('created_at', 'desc')->take(5)->get();
-    $tacgias = TacGia::orderBy('maTG')->take(6)->get();
+    $tacgias = TacGia::orderBy('maTG')->take(5)->get();
+    $top3BaiViet = BaiViet::latest('created_at')->take(3)->with('nguoiDung')->get();
 
-    return view('home', compact('danhmucs','sachMoi','tacgias'));
+
+    return view('home', compact('danhmucs','sachMoi','tacgias','top3BaiViet'));
 }
 public function timKiem(Request $request) {
     $keyword = $request->tuKhoa;

@@ -24,39 +24,38 @@
 </head>
 
 <style>
-    .search-bar input:focus {
-        box-shadow: 0 0 0 0.15rem rgba(108, 117, 125, 0.25);
-    }
+	
+    .search-bar {
+    position: relative;
+    width: 250px; /* hoặc điều chỉnh theo ý */
+}
 
-    #suggestionsList li {
-        font-size: 14px;
-        padding: 6px 12px;
-        cursor: pointer;
-        border-radius: 0 !important;
-    }
-
-    #suggestionsList li:hover {
-        background-color: #f8f9fa;
-    }
-	.search-bar input[type="search"] {
+.search-bar input[type="search"] {
+    width: 100%;
     height: 40px;
-    padding: 10px 15px;
+    padding: 0 45px 0 15px; /* chừa phải 40px cho nút */
     font-size: 14px;
     border-radius: 20px;
     border: 1px solid #ccc;
     outline: none;
-    width: 200px;
-    vertical-align: middle;
+    box-sizing: border-box;
 }
 
 .search-bar button {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
     background: none;
     border: none;
-    position: relative;
-    right: 35px;
-    top: 3px;
     cursor: pointer;
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+    color: #6c757d;
+    line-height: 1;
 }
+
 
 </style>
 
@@ -65,7 +64,7 @@
 
 		<div class="top-content">
 			<div class="container-fluid">
-				<div class="row">
+				<div class="row ">
 					<div class="col-md-6">
 						<div class="social-links">
 							<ul>
@@ -92,7 +91,7 @@
 
 		<header id="header">
 			<div class="container-fluid">
-				<div class="row">
+				<div class="row ">
 
 					<div class="col-md-2">
 						<div class="main-logo">
@@ -106,7 +105,7 @@
 						<nav id="navbar">
 							<div class="main-menu stellarnav">
 								<ul class="menu-list">
-									<li class="menu-item active"><a href="#home">Trang chủ</a></li>
+									<li class="menu-item active"><a href="{{ route('home') }}">Trang chủ</a></li>
 									<li class="menu-item has-sub">
 									<a href="#" class="nav-link">Danh mục</a>
 										<ul>
@@ -116,9 +115,9 @@
 										</ul>
 
 									</li>
-									<li class="menu-item"><a href="#featured-books" class="nav-link">Tác giả</a></li>
-									<li class="menu-item"><a href="#popular-books" class="nav-link">Bài viết</a></li>
-									<li class="menu-item"><a href="#special-offer" class="nav-link">Về BookNest</a></li>
+									<li class="menu-item"><a href="{{ route('tacgia.show') }}" class="nav-link">Tác giả</a></li>
+									<li class="menu-item"><a href="#latest-blog" class="nav-link">Bài viết</a></li>
+									<li class="menu-item"><a href="#best-selling" class="nav-link">Về BookNest</a></li>
 									
 								</ul>
 
@@ -134,7 +133,7 @@
 					</div>
 
 					<!-- Tìm kiếm -->
-					<div class="col-md-2 position-relative">
+					<div class="col-md-2 position-relative ">
 						<div class="search-bar position-relative" style="max-width: 220px;">
 							<form id="searchForm" method="GET" action="{{ route('timkiem') }}">
 								<input type="text" name="tuKhoa" id="searchInput" class="form-control rounded-pill px-3 py-1"
@@ -154,7 +153,7 @@
 
 
 
-					<div class="col-md-1 position-relative d-flex align-items-center gap-3">
+					<div class="col-md-1 position-relative d-flex  gap-3">
 						<!-- Icon người dùng -->
 						<div class="dropdown">
 							<a href="#" class="user-account for-buy" data-bs-toggle="dropdown">

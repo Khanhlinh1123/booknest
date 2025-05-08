@@ -167,6 +167,7 @@ a {
 
 .category-title {
     background-color: #a47148; /* Nâu nhạt */
+    font-family: "Be Vietnam Pro", Georgia, serif;
     color: white;
     padding: 10px 12px;
     font-size: 15px;
@@ -1831,6 +1832,7 @@ img.post-image {
 }
 
 #header-wrap.show .search-bar {
+
   width: 190px;
 }
 
@@ -2521,3 +2523,4 @@ footer#footer {
     width: 100%;
   }
 }
+

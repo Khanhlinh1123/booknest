@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GioHangController;
+use App\Http\Controllers\TacGiaController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,6 +36,7 @@ Route::post('register', [RegisteredUserController::class, 'store']);
 
 Route::get('/danh-muc/{maDM}', [App\Http\Controllers\DanhMucController::class, 'show'])->name('danhmuc.show');
 use App\Http\Controllers\SachController;
+Route::get('/sach-moi', [SachController::class, 'sachMoi'])->name('sach.new');
 
 Route::get('/sach/{id}', [SachController::class, 'show'])->name('sach.show');
 // Route::get('/tim-kiem', [App\Http\Controllers\TimKiemController::class, 'index'])->name('timkiem.index');
@@ -57,5 +59,6 @@ Route::post('/gio-hang/api-xoa', [GioHangController::class, 'apiXoa']);
 // Route::get('/thong-tin-ca-nhan/lich-su-mua-hang/{id}/chi-tiet/xoa', [App\Http\Controllers\LichSuMuaHangController::class, 'destroy'])->name('lichsumuahang.chitiet.xoa');
 Route::get('/tim-kiem', [App\Http\Controllers\HomeController::class, 'timKiem'])->name('timkiem');
 Route::get('/api/sach-search', [App\Http\Controllers\HomeController::class, 'apiTimKiem']);
+Route::get('/tac-gia', [TacGiaController::class, 'index'])->name('tacgia.show');
 
 require __DIR__.'/auth.php';

@@ -1,5 +1,7 @@
 @include('header')
-
+<div class="banner-container mb-4">
+    <img src="{{ asset('images/banner1.jpg') }}" alt="Banner Sách Mới" class="img-fluid w-100" style="max-height: 300px; object-fit: cover;">
+</div>
 <style>
     .sort-bar a {
         border-radius: 20px;
@@ -19,6 +21,7 @@
         border: 1px solid #eee;
         border-radius: 12px;
         transition: 0.3s;
+        
     }
 
     .product-item:hover {
@@ -44,6 +47,23 @@
     .add-to-cart:hover {
         background-color: #8d5c3c;
     }
+    .filter-box {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.filter-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-family: 'Times New Roman', Times, serif;
+    
+}
+
 </style>
 
 
@@ -80,7 +100,7 @@
 
             <!-- Lọc theo tác giả -->
             <div class="filter-box mt-3">
-                <h6 class="filter-title">Tác giả</h6>
+                <h6 class="filter-title" >Tác giả</h6>
                 @foreach($authors as $author)
                     <div class="form-check">
                         <input type="checkbox" name="author[]" value="{{ $author }}" class="form-check-input" {{ in_array($author, request()->get('author', [])) ? 'checked' : '' }}>
@@ -96,33 +116,33 @@
     <div class="col-md-1">
     </div>
         <!-- SẢN PHẨM  -->
-        <div class="col-md-8">
-            <h2 class="mb-4">Sách thuộc danh mục: {{ $danhmuc->tenDM }}</h2>
+        <div class="col-md-9">
+            <h2 class="mb-4" style="font-family: 'Times New Roman', Times, serif;">Sách thuộc danh mục: {{ $danhmuc->tenDM }}</h2>
             <div class="sort-bar mb-4 d-flex flex-wrap align-items-center gap-2">
-    <span class="me-2 fw-semibold">Sắp xếp theo:</span>
-    @php
-    $sortOptions = [
-        'default' => 'Mặc định',
-        'newest' => 'Sách mới',
-        'price_asc' => 'Giá thấp - cao',
-        'price_desc' => 'Giá cao - thấp',
-    ];
-    $currentSort = request()->query('sort', 'default'); // lấy từ URL
-@endphp
+                <span class="me-2 fw-semibold">Sắp xếp theo:</span>
+                @php
+                $sortOptions = [
+                    'default' => 'Mặc định',
+                    'newest' => 'Sách mới',
+                    'price_asc' => 'Giá thấp - cao',
+                    'price_desc' => 'Giá cao - thấp',
+                ];
+                $currentSort = request()->query('sort', 'default'); // lấy từ URL
+            @endphp
 
-@foreach ($sortOptions as $key => $label)
-    <a href="{{ request()->fullUrlWithQuery(['sort' => $key]) }}"
-       class="btn btn-sm {{ $currentSort === $key ? 'btn-dark text-white' : 'btn-outline-secondary' }}">
-        {{ $label }}
-    </a>
-@endforeach
+            @foreach ($sortOptions as $key => $label)
+                <a href="{{ request()->fullUrlWithQuery(['sort' => $key]) }}"
+                class="btn btn-sm {{ $currentSort === $key ? 'btn-dark text-white' : 'btn-outline-secondary' }}">
+                    {{ $label }}
+                </a>
+            @endforeach
 
 
 </div>
 
             <div class="row">
             @forelse($sachs as $sach)
-                <div class="col-md-4 mb-4">
+                <div class="col-md-3 mb-4">
                     <div class="product-item border rounded p-2 h-100">
                         <figure class="product-style mb-2">
                             <a href="{{ route('sach.show', $sach->maSach) }}">
@@ -137,7 +157,7 @@
 									</form>                        </figure>
                         <figcaption>
                             <h6>
-                                <a href="{{ route('sach.show', $sach->maSach) }}" class="text-decoration-none text-dark">
+                                <a href="{{ route('sach.show', $sach->maSach) }}" class="text-decoration-none text-dark" style="font-family: 'Times New Roman', Times, serif;">
                                     {{ $sach->tenSach }}
                                 </a>
                             </h6>

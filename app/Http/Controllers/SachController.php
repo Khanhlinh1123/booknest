@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Sach;
+use App\Models\DanhMuc;
 
 class SachController extends Controller
 {
@@ -12,7 +13,7 @@ class SachController extends Controller
      */
     public function index()
     {
-        //
+    
     }
 
     /**
@@ -37,8 +38,69 @@ class SachController extends Controller
     public function show($id)
     {
         $sach = Sach::with(['tacGia', 'nhaXuatBan', 'khuyenMai'])->findOrFail($id);
-        return view('sach.show', compact('sach'));
+        $sachCDM = Sach::with('khuyenMai')
+        ->where('maDM', $sach->maDM)
+        ->where('maSach', '!=', $sach->maSach)
+        ->orderBy('created_at', 'desc')
+        ->take(5)
+        ->get();
+        return view('sach.show', compact('sach', 'sachCDM'));
+
+    // Lấy 5 sách cùng danh mục (trừ chính nó)
+    
+
     }
+    public function sachMoi(Request $request)
+    {
+        $priceRanges = [
+            ['value' => '0-100000', 'label' => 'Dưới 100.000₫'],
+            ['value' => '100000-200000', 'label' => '100.000₫ – 200.000₫'],
+            ['value' => '200000-300000', 'label' => '200.000₫ – 300.000₫'],
+            ['value' => '300000-10000000', 'label' => 'Trên 300.000₫'],
+        ];
+
+        $query = Sach::with(['tacGia', 'danhMuc'])->orderBy('created_at', 'desc');
+
+        // Lọc theo khoảng giá
+        if ($request->has('price')) {
+            $priceFilters = $request->price;
+            $query->where(function ($q) use ($priceFilters) {
+                foreach ($priceFilters as $range) {
+                    [$min, $max] = explode('-', str_replace('+', '-10000000', $range));
+                    $q->orWhereBetween('giaGoc', [(int)$min, (int)$max]);
+                }
+            });
+        }
+
+        // Lọc theo danh mục
+        if ($request->has('danhmuc')) {
+            $query->whereIn('maDM', $request->danhmuc);
+        }
+
+        // Sắp xếp
+        $sachs = $query->get();
+        if ($request->sort === 'price_asc') {
+            $sachs = $sachs->sortBy(fn($sach) => $sach->giaDaGiam);
+        } elseif ($request->sort === 'price_desc') {
+            $sachs = $sachs->sortByDesc(fn($sach) => $sach->giaDaGiam);
+        }
+
+        // Phân trang thủ công
+        $page = $request->get('page', 1);
+        $perPage = 8;
+        $sachs = new \Illuminate\Pagination\LengthAwarePaginator(
+            $sachs->forPage($page, $perPage),
+            $sachs->count(),
+            $perPage,
+            $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
+        $danhmucs = DanhMuc::all(); // để hiển thị bộ lọc thể loại
+
+        return view('sach.new', compact('sachs', 'priceRanges', 'danhmucs'));
+    }
+
 
     /**
      * Show the form for editing the specified resource.
