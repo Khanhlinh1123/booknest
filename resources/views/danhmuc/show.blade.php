@@ -145,7 +145,7 @@
                 <div class="col-md-3 mb-4">
                     <div class="product-item border rounded p-2 h-100">
                         <figure class="product-style mb-2">
-                            <a href="{{ route('sach.show', $sach->maSach) }}">
+                            <a href="{{ route('sach.show', $sach->slug) }}">
                                 <img src="{{ asset('images/sach/' . $sach->hinhanh) }}" alt="{{ $sach->tenSach }}"
                                     class="img-fluid" style="height: 250px; object-fit: cover;">
                             </a>
@@ -157,7 +157,7 @@
 									</form>                        </figure>
                         <figcaption>
                             <h6>
-                                <a href="{{ route('sach.show', $sach->maSach) }}" class="text-decoration-none text-dark" style="font-family: 'Times New Roman', Times, serif;">
+                                <a href="{{ route('sach.show', $sach->slug) }}" class="text-decoration-none text-dark" style="font-family: 'Times New Roman', Times, serif;">
                                     {{ $sach->tenSach }}
                                 </a>
                             </h6>

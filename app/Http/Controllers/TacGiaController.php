@@ -12,9 +12,17 @@ class TacGiaController extends Controller
     public function index()
     {
         $tacgias = TacGia::all(); // hoặc paginate nếu nhiều
-    return view('tacgia.show', compact('tacgias'));
+    return view('tacgia.index', compact('tacgias'));
         // Chưa có logic gì ở đây
     }
+    public function show($slug)
+    {
+        $tacgia = TacGia::where('slug', $slug)->firstOrFail();
+        $sachs = $tacgia->sach()->with('tacGia')->paginate(12); // 12 quyển / trang
+
+        return view('tacgia.show', compact('tacgia', 'sachs'));
+    }
+
 
     public function create()
     {

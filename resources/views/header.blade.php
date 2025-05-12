@@ -115,8 +115,8 @@
 										</ul>
 
 									</li>
-									<li class="menu-item"><a href="{{ route('tacgia.show') }}" class="nav-link">Tác giả</a></li>
-									<li class="menu-item"><a href="#latest-blog" class="nav-link">Bài viết</a></li>
+									<li class="menu-item"><a href="{{ route('tacgia.index') }}" class="nav-link">Tác giả</a></li>
+									<li class="menu-item"><a href="{{ route('baiviet.index') }}" class="nav-link">Bài viết</a></li>
 									<li class="menu-item"><a href="#best-selling" class="nav-link">Về BookNest</a></li>
 									
 								</ul>

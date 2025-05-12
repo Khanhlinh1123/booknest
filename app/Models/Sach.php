@@ -7,7 +7,7 @@ class Sach extends Model
 {
     protected $table = 'sach';
     protected $primaryKey = 'maSach';
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'tenSach', 'giaGoc', 'maNXB', 'maTG', 'namXB',

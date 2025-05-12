@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GioHangController;
 use App\Http\Controllers\TacGiaController;
+use App\Http\Controllers\BaiVietController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,7 +40,7 @@ Route::get('/danh-muc/{maDM}', [App\Http\Controllers\DanhMucController::class, '
 use App\Http\Controllers\SachController;
 Route::get('/sach-moi', [SachController::class, 'sachMoi'])->name('sach.new');
 
-Route::get('/sach/{id}', [SachController::class, 'show'])->name('sach.show');
+Route::get('/sach/{slug}', [SachController::class, 'show'])->name('sach.show');
 // Route::get('/tim-kiem', [App\Http\Controllers\TimKiemController::class, 'index'])->name('timkiem.index');
 Route::get('/gio-hang', [GioHangController::class, 'hienThiGioHang'])->name('giohang.hienthi');
 Route::post('/gio-hang/them', [GioHangController::class, 'themVaoGio'])->name('giohang.them');
@@ -59,6 +61,10 @@ Route::post('/gio-hang/api-xoa', [GioHangController::class, 'apiXoa']);
 // Route::get('/thong-tin-ca-nhan/lich-su-mua-hang/{id}/chi-tiet/xoa', [App\Http\Controllers\LichSuMuaHangController::class, 'destroy'])->name('lichsumuahang.chitiet.xoa');
 Route::get('/tim-kiem', [App\Http\Controllers\HomeController::class, 'timKiem'])->name('timkiem');
 Route::get('/api/sach-search', [App\Http\Controllers\HomeController::class, 'apiTimKiem']);
-Route::get('/tac-gia', [TacGiaController::class, 'index'])->name('tacgia.show');
+Route::get('/tac-gia', [TacGiaController::class, 'index'])->name('tacgia.index');
+Route::get('/tac-gia/{slug}', [TacGiaController::class, 'show'])->name('tacgia.show');
+
+Route::get('/bai-viet', [BaiVietController::class, 'index'])->name('baiviet.index');
+Route::get('/bai-viet/{slug}', [BaiVietController::class, 'show'])->name('baiviet.show');
 
 require __DIR__.'/auth.php';

@@ -65,8 +65,10 @@
 						<div class="col-md-2-4">
 							<div class="product-item">
 								<figure class="product-style">
+								<a href="{{ route('sach.show', $sach->slug) }}">
 									<img src="{{ asset('images/sach/' . $sach->hinhanh) }}" alt="{{ $sach->tenSach }}" class="product-item" style="width: 100%; height: 350px; object-fit: cover;">
-									<form action="{{ route('giohang.them') }}" method="POST" style="display: inline;">
+								</a>									
+								<form action="{{ route('giohang.them') }}" method="POST" style="display: inline;">
 										@csrf
 										<input type="hidden" name="maSach" value="{{ $sach->maSach }}">
 										<input type="hidden" name="soLuong" value="1">
@@ -75,7 +77,11 @@
 
 								</figure>
 								<figcaption>
-									<h3>{{ $sach->tenSach }}</h3>
+								<h3>
+									<a href="{{ route('sach.show', $sach->slug) }}" class="text-decoration-none text-dark">
+										{{ $sach->tenSach }}
+									</a>
+								</h3>
 									<span>{{ $sach->tacGia->tenTG ?? 'Không rõ' }}</span>
 									<div class="item-price">
 										@if($sach->giaDaGiam < $sach->giaGoc)
@@ -139,7 +145,7 @@
 			<div class="row">
 			<div class="col-md-12">
 				<div class="btn-wrap align-right">
-					<a href="{{ route('tacgia.show') }}" class="btn-accent-arrow">Xem tất cả tác giả <i class="icon icon-ns-arrow-right"></i></a>
+					<a href="{{ route('tacgia.index') }}" class="btn-accent-arrow">Xem tất cả tác giả <i class="icon icon-ns-arrow-right"></i></a>
 				</div>
 			</div>
 		</div>
@@ -277,7 +283,11 @@
 								</figure>
 								<div class="post-item">
 									<div class="meta-date">{{ \Carbon\Carbon::parse($bv->created_at)->format('M d, Y') }}</div>
-									<h3><a href="#">{{ \Str::limit(strip_tags($bv->tieuDe), 50) }}</a></h3>
+									<h3>
+									<a href="{{ route('baiviet.show', $bv->slug) }}">
+										{{ \Str::limit(strip_tags($bv->tieuDe), 50) }}
+									</a>
+									</h3>
 
 									<div class="links-element">
 										<div class="categories">{{ $bv->nguoiDung->tenND ?? 'Ẩn danh' }}</div>
@@ -302,8 +312,8 @@
 					<div class="row">
 
 						<div class="btn-wrap align-center">
-							<a href="#" class="btn btn-outline-accent btn-accent-arrow" tabindex="0">Xem tất cả bài viết<i
-									class="icon icon-ns-arrow-right"></i></a>
+						<a href="{{ route('baiviet.index') }}" class="btn btn-outline-accent btn-accent-arrow" tabindex="0">
+						Xem tất cả bài viết<i class="icon icon-ns-arrow-right"></i></a>
 						</div>
 					</div>
 

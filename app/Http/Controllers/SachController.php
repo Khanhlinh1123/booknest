@@ -35,9 +35,9 @@ class SachController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($slug)
     {
-        $sach = Sach::with(['tacGia', 'nhaXuatBan', 'khuyenMai'])->findOrFail($id);
+        $sach = Sach::with(['tacGia', 'nhaXuatBan', 'khuyenMai'])->where('slug', $slug)->firstOrFail();
         $sachCDM = Sach::with('khuyenMai')
         ->where('maDM', $sach->maDM)
         ->where('maSach', '!=', $sach->maSach)
