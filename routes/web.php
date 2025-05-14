@@ -6,6 +6,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GioHangController;
 use App\Http\Controllers\TacGiaController;
 use App\Http\Controllers\BaiVietController;
+use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\SocialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,5 +68,8 @@ Route::get('/tac-gia/{slug}', [TacGiaController::class, 'show'])->name('tacgia.s
 
 Route::get('/bai-viet', [BaiVietController::class, 'index'])->name('baiviet.index');
 Route::get('/bai-viet/{slug}', [BaiVietController::class, 'show'])->name('baiviet.show');
+
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google.redirect');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 require __DIR__.'/auth.php';

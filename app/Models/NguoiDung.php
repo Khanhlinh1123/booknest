@@ -15,7 +15,7 @@ class NguoiDung extends Model implements AuthenticatableContract
 
     protected $fillable = [
         'tenDangNhap', 'matKhau', 'email', 'soDT', 'tenND', 'diaChi',
-        'ngaySinh', 'gioiTinh', 'phanQuyen',
+        'ngaySinh', 'gioiTinh', 'phanQuyen', 'avatar', 
     ];
     public $timestamps = true;
 

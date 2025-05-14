@@ -117,41 +117,41 @@
 
 <section id="author-section" class="py-5 my-5" data-aos="fade-up">
     <div class="container">
-        <div class="row">
-		<div class="section-header align-center">
-					<div class="title">
-						<span></span>
-					</div>
-					<h2 class="section-title">Các tác giả</h2>
-				</div>
-            <div class="col-md-12">
-			
-
-                <div class="row justify-content-center text-center">
-                    @foreach ($tacgias as $tacgia)
-                        <div class="col-6 col-sm-4 col-md-2 mb-4">
-                            <div class="author-item">
-                                <img src="{{ asset('images/tacgia/' . $tacgia->hinhanh) }}"
-                                     alt="{{ $tacgia->tenTG }}"
-                                     class="rounded-circle img-fluid"
-                                     style="width: 200px; height: 200px; object-fit: cover; margin-bottom: 10px;">
-                                <p>{{ $tacgia->tenTG }}</p>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
+        <div class="section-header align-center mb-4">
+            <div class="title">
+                <span></span>
             </div>
-			<div class="row">
-			<div class="col-md-12">
-				<div class="btn-wrap align-right">
-					<a href="{{ route('tacgia.index') }}" class="btn-accent-arrow">Xem tất cả tác giả <i class="icon icon-ns-arrow-right"></i></a>
-				</div>
-			</div>
-		</div>
+            <h2 class="section-title">Các tác giả</h2>
+        </div>
+
+        <div class="row justify-content-center text-center">
+            @foreach ($tacgias as $tacgia)
+                <div class="col-6 col-sm-4 col-md-2 mb-4">
+                    <a href="{{ route('tacgia.show', $tacgia->slug) }}" class="text-decoration-none text-dark">
+                        <div class="author-item">
+                            <img src="{{ asset('images/tacgia/' . $tacgia->hinhanh) }}"
+                                 alt="{{ $tacgia->tenTG }}"
+                                 class="rounded-circle img-fluid"
+                                 style="width: 150px; height: 150px; object-fit: cover; margin-bottom: 10px;">
+                            <p class="fw-semibold">{{ $tacgia->tenTG }}</p>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="btn-wrap align-right">
+                    <a href="{{ route('tacgia.index') }}" class="btn-accent-arrow">
+                        Xem tất cả tác giả <i class="icon icon-ns-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
 
 
 	

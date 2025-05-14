@@ -47,6 +47,8 @@ class RegisteredUserController extends Controller
             'soDT' => $request->soDT,
             'email' => $request->email,
             'matKhau' => Hash::make($request->matKhau), // Mã hóa mật khẩu trước khi lưu
+            'phanQuyen' => 'customer', 
+
         ]);
 
         // Đăng nhập người dùng sau khi đăng ký thành công
