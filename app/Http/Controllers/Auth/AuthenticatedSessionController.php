@@ -45,15 +45,18 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
+        // ❗ Kiểm tra xác minh email
+        if (is_null($user->email_verified_at)) {
+            return redirect()->route('verification.notice');
+        }
+
         // 🔄 Merge giỏ hàng từ session nếu có
         if (session()->has('cart')) {
             $cart = session('cart');
 
-            // Tìm hoặc tạo giỏ hàng cho người dùng
             $gioHang = GioHang::firstOrCreate(['maND' => $user->maND]);
 
             foreach ($cart as $maSach => $soLuong) {
-                // Kiểm tra nếu đã có sách trong giỏ, thì cộng dồn
                 $existing = DB::table('giohang_sach')
                     ->where('maGH', $gioHang->maGH)
                     ->where('maSach', $maSach)
@@ -75,16 +78,12 @@ class AuthenticatedSessionController extends Controller
                 }
             }
 
-            // Xoá giỏ hàng session sau khi merge
             session()->forget('cart');
         }
 
-        // Điều hướng theo phân quyền
-        if ($user->phanQuyen === 'admin') {
-            return redirect()->route('dashboard');
-        }
-
-        return redirect()->route('home');
+        return $user->phanQuyen === 'admin'
+            ? redirect()->route('dashboard')
+            : redirect()->route('home');
     }
 
     return back()->withErrors([

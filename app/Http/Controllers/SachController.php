@@ -44,7 +44,16 @@ class SachController extends Controller
         ->orderBy('created_at', 'desc')
         ->take(5)
         ->get();
-        return view('sach.show', compact('sach', 'sachCDM'));
+        $sach = Sach::where('slug', $slug)->with(['tacGia', 'nhaXuatBan', 'danhGias.nguoiDung'])->firstOrFail();
+
+        // Lấy số lượng đánh giá và điểm trung bình
+        $soDanhGia = $sach->danhGias()->count();
+        $trungBinhSao = round($sach->danhGias()->avg('soSao'), 1); // làm tròn 1 chữ số thập phân
+
+        // Các sách cùng danh mục
+        $sachCDM = Sach::where('maDM', $sach->maDM)->where('maSach', '!=', $sach->maSach)->limit(5)->get();
+
+        return view('sach.show', compact('sach', 'soDanhGia', 'trungBinhSao', 'sachCDM'));
 
     // Lấy 5 sách cùng danh mục (trừ chính nó)
     

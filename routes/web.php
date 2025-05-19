@@ -7,6 +7,12 @@ use App\Http\Controllers\GioHangController;
 use App\Http\Controllers\TacGiaController;
 use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Verified;    
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\SocialController;
 
 /*
@@ -27,6 +33,12 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+Route::post('reset-password', [NewPasswordController::class, 'store'])->name('password.update');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -71,5 +83,8 @@ Route::get('/bai-viet/{slug}', [BaiVietController::class, 'show'])->name('baivie
 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google.redirect');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+
+
 
 require __DIR__.'/auth.php';

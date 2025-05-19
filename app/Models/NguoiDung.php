@@ -2,44 +2,58 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class NguoiDung extends Model implements AuthenticatableContract
+class NguoiDung extends Authenticatable implements MustVerifyEmail
 {
-    use Authenticatable;
+    use HasFactory, Notifiable;
+
     protected $table = 'nguoidung';
     protected $primaryKey = 'maND';
 
     protected $fillable = [
         'tenDangNhap', 'matKhau', 'email', 'soDT', 'tenND', 'diaChi',
-        'ngaySinh', 'gioiTinh', 'phanQuyen', 'avatar', 
+        'ngaySinh', 'gioiTinh', 'phanQuyen', 'avatar',
     ];
+
+    protected $hidden = [
+        'matKhau', 'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
     public $timestamps = true;
 
+    // Cung cấp đúng tên cột cho mật khẩu
+    public function getAuthPassword()
+    {
+        return $this->matKhau;
+    }
 
-    protected $hidden = ['matKhau'];
-    public function donHangs() {
+    // Các quan hệ
+    public function donHangs()
+    {
         return $this->hasMany(Donhang::class, 'maND');
     }
 
-    public function danhGias() {
+    public function danhGias()
+    {
         return $this->hasMany(DanhGia::class, 'maND');
     }
 
     public function gioHang()
-{
-    return $this->hasOne(GioHang::class, 'maND');
-}
+    {
+        return $this->hasOne(GioHang::class, 'maND');
+    }
 
     public function getAuthIdentifierName()
     {
         return 'maND';
     }
-    public function getAuthPassword()
-    {
-        return $this->matKhau; 
-    }
+
 }

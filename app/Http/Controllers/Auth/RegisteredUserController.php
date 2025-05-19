@@ -30,31 +30,34 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
-        // Validate input
-        $request->validate([
-            'tenDangNhap' => ['required', 'string', 'max:255', 'unique:nguoidung'],
-            'tenND' => ['required', 'string', 'max:255'],
-            'soDT' => ['required', 'string', 'max:15'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:nguoidung'],
-            'matKhau' => ['required', 'string', 'min:8', 'confirmed'], // Đảm bảo mật khẩu dài ít nhất 8 ký tự và trùng khớp
-        ]);
-        
-        // Tạo người dùng mới
-        $nguoiDung = NguoiDung::create([
-            'tenDangNhap' => $request->tenDangNhap,
-            'tenND' => $request->tenND,
-            'soDT' => $request->soDT,
-            'email' => $request->email,
-            'matKhau' => Hash::make($request->matKhau), // Mã hóa mật khẩu trước khi lưu
-            'phanQuyen' => 'customer', 
+{
+    // Validate input
+    $request->validate([
+        'tenDangNhap' => ['required', 'string', 'max:255', 'unique:nguoidung'],
+        'tenND' => ['required', 'string', 'max:255'],
+        'soDT' => ['required', 'string', 'max:15'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:nguoidung'],
+        'matKhau' => ['required', 'string', 'min:8', 'confirmed'],
+    ]);
 
-        ]);
+    // Tạo người dùng mới
+    $nguoiDung = NguoiDung::create([
+        'tenDangNhap' => $request->tenDangNhap,
+        'tenND' => $request->tenND,
+        'soDT' => $request->soDT,
+        'email' => $request->email,
+        'matKhau' => Hash::make($request->matKhau),
+        'phanQuyen' => 'customer',
+    ]);
 
-        // Đăng nhập người dùng sau khi đăng ký thành công
-        Auth::login($nguoiDung);
+    // 📧 Gửi email xác minh
+    event(new Registered($nguoiDung));
 
-        // Chuyển hướng đến trang chủ hoặc dashboard sau khi đăng ký
-        return redirect()->route('home'); // Hoặc thay bằng route bạn muốn
-    }
+    // Tự động đăng nhập
+    Auth::login($nguoiDung);
+
+    // Chuyển hướng tới trang thông báo xác minh
+    return redirect()->route('verification.notice');
+}
+
 }

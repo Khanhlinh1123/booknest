@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
 
-            <h3 class="mb-4 text-center">📝 Đăng ký tài khoản mới</h3>
+            <h3 class="mb-4 text-center"><b>📝 ĐĂNG KÝ TÀI KHOẢN MỚI </b></h3>
 
             <form method="POST" action="{{ route('register') }}">
                 @csrf

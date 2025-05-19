@@ -55,6 +55,10 @@ class Sach extends Model
     {
         return $this->donHangs()->sum('chitietdonhang.soLuong');
     }
+    public function danhGias() {
+        return $this->hasMany(DanhGia::class, 'maSach');
+    }
+    
 
     public function nhaXuatBan() {
         return $this->belongsTo(Nhaxuatban::class, 'maNXB');

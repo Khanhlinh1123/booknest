@@ -7,10 +7,10 @@
 
                 <!-- Cột trái -->
                 <div class="col-md-6 border-end">
-                    <h2 class="mb-4 text-success fw-bold">ĐĂNG NHẬP TÀI KHOẢN</h2>
+                    <h2 class="mb-4 fw-bold text-center"><b>ĐĂNG NHẬP TÀI KHOẢN</b></h2>
 
                     @if (session('status'))
-                        <div class="alert alert-success">{{ session('status') }}</div>
+                        <div class="alert alert-success text-center">{{ session('status') }}</div>
                     @endif
 
                     <form method="POST" action="{{ route('login') }}">
@@ -35,45 +35,45 @@
                             @enderror
                         </div>
 
-                        <div class="d-grid mb-3">
-                            <button type="submit" class="btn btn-success fw-bold rounded-pill shadow-sm py-2">
+                        <div class="d-flex justify-content-center mb-3">
+                            <button type="submit"
+                                    class="btn text-white fw-bold rounded-pill shadow-sm py-2 w-75"
+                                    style="background-color: #7B3F00;">
                                 Đăng nhập
                             </button>
                         </div>
 
                         <p class="text-center fw-semibold">Hoặc đăng nhập bằng</p>
-                        <div class="d-flex justify-content-between mb-3">
-                            <a href="#" class="btn fw-bold w-50 me-2 rounded-pill shadow-sm text-white"
-                               style="background-color: #3b5998;">
-                                <i class="fab fa-facebook-f me-2"></i>Facebook
-                            </a>
+                        <div class="d-grid mb-3">
                             <a href="{{ route('auth.google.redirect') }}"
-                               class="btn fw-bold w-50 ms-2 rounded-pill shadow-sm text-white"
+                               class="btn fw-bold w-100 rounded-pill shadow-sm text-white"
                                style="background-color: #DB4437;">
-                                <i class="fab fa-google me-2"></i>Google
+                                <i class="fab fa-google me-2"></i>Đăng nhập bằng Google
                             </a>
                         </div>
 
                         <div class="text-center">
                             <a href="{{ route('password.request') }}" class="text-decoration-none small">
-                                Bạn quên mật khẩu bấm vào đây
+                                Bạn quên mật khẩu?
                             </a>
                         </div>
                     </form>
                 </div>
 
                 <!-- Cột phải -->
-                <div class="col-md-6">
-                    <h2 class="fw-bold text-success">QUYỀN LỢI CỦA THÀNH VIÊN</h2>
-                    <ul class="list-unstyled mt-3 text-muted">
+                <div class="col-md-6 text-center">
+                    <h2 class="fw-bold ">QUYỀN LỢI CỦA THÀNH VIÊN</h2>
+                    <ul class="list-unstyled mt-3 text-muted text-start ms-4">
                         <li>🚀 Vận chuyển siêu tốc</li>
                         <li>📚 Sản phẩm đa dạng</li>
                         <li>🔁 Đổi trả dễ dàng</li>
                         <li>🎁 Tích điểm đổi quà</li>
                         <li>💸 Giảm giá cho lần mua tiếp theo lên đến 10%</li>
                     </ul>
-                    <div class="d-grid mt-4">
-                        <a href="{{ route('register') }}" class="btn btn-outline-success fw-bold rounded-pill shadow-sm py-2">
+                    <div class="d-flex justify-content-center mt-4">
+                        <a href="{{ route('register') }}"
+                           class="btn fw-bold rounded-pill shadow-sm py-2 text-white w-75"
+                           style="background-color: #7B3F00;">
                             Đăng ký
                         </a>
                     </div>
