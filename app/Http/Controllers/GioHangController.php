@@ -118,35 +118,48 @@ public function apiTang(Request $request)
 public function apiGiam(Request $request)
 {
     $maSach = $request->input('maSach');
+    $soLuongMoi = 0;
 
     if (Auth::check()) {
         $user = Auth::user();
         $gioHang = GioHang::firstOrCreate(['maND' => $user->maND]);
 
-        DB::table('giohang_sach')
-            ->where('maGH', $gioHang->maGH)
+        $item = GioHangSach::where('maGH', $gioHang->maGH)
             ->where('maSach', $maSach)
-            ->decrement('soLuong', 1);
+            ->first();
 
-        // Nếu <= 0 thì xóa
-        DB::table('giohang_sach')
-            ->where('maGH', $gioHang->maGH)
-            ->where('maSach', $maSach)
-            ->where('soLuong', '<=', 0)
-            ->delete();
+        if ($item) {
+            $item->soLuong--;
+            if ($item->soLuong <= 0) {
+                $item->delete();
+                $soLuongMoi = 0;
+            } else {
+                $item->save();
+                $soLuongMoi = $item->soLuong;
+            }
+        }
+
     } else {
         $cart = session('cart', []);
         if (isset($cart[$maSach])) {
             $cart[$maSach]--;
             if ($cart[$maSach] <= 0) {
                 unset($cart[$maSach]);
+                $soLuongMoi = 0;
+            } else {
+                $soLuongMoi = $cart[$maSach];
             }
             session(['cart' => $cart]);
         }
     }
 
-    return response()->json(['success' => true]);
+    return response()->json([
+        'success' => true,
+        'soLuong' => $soLuongMoi,
+        'canXoa' => $soLuongMoi <= 1
+    ]);
 }
+
 
 // API xóa sản phẩm
 public function apiXoa(Request $request)

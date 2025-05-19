@@ -4,11 +4,15 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GioHangController;
+use App\Http\Controllers\DonHangController;
 use App\Http\Controllers\TacGiaController;
+use App\Http\Controllers\DanhGiaController;
 use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Verified;    
 use Illuminate\Auth\Notifications\VerifyEmail;
@@ -55,7 +59,6 @@ use App\Http\Controllers\SachController;
 Route::get('/sach-moi', [SachController::class, 'sachMoi'])->name('sach.new');
 
 Route::get('/sach/{slug}', [SachController::class, 'show'])->name('sach.show');
-// Route::get('/tim-kiem', [App\Http\Controllers\TimKiemController::class, 'index'])->name('timkiem.index');
 Route::get('/gio-hang', [GioHangController::class, 'hienThiGioHang'])->name('giohang.hienthi');
 Route::post('/gio-hang/them', [GioHangController::class, 'themVaoGio'])->name('giohang.them');
 Route::post('/gio-hang/api-tang', [GioHangController::class, 'apiTang']);
@@ -80,9 +83,18 @@ Route::get('/tac-gia/{slug}', [TacGiaController::class, 'show'])->name('tacgia.s
 
 Route::get('/bai-viet', [BaiVietController::class, 'index'])->name('baiviet.index');
 Route::get('/bai-viet/{slug}', [BaiVietController::class, 'show'])->name('baiviet.show');
+Route::post('/danh-gia/submit', [DanhGiaController::class, 'store'])->name('danhgia.submit');
 
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google.redirect');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dat-hang/thong-tin', [DonHangController::class, 'showStep1'])->name('dathang.step1');
+    Route::post('/dat-hang/thong-tin', [DonHangController::class, 'handleStep1'])->name('dathang.step1.post');
+    Route::get('/dat-hang/xac-nhan', [DonHangController::class, 'showStep2'])->name('dathang.step2');
+    Route::post('/dat-hang/xac-nhan', [DonHangController::class, 'handleStep2'])->name('dathang.step2.post');
+    
+});
 
 
 

@@ -84,11 +84,32 @@
                     <span class="ms-2 text-muted">({{ $soDanhGia }} đánh giá)</span>
                     <span class="text-muted ms-3">Đã bán {{ $sach->soLuongDaBan ?? 0 }}</span>
                 </div>
+                <form method="POST">
+                    @csrf
+                    <input type="hidden" name="maSach" value="{{ $sach->maSach }}">
+                    <div class="d-flex align-items-center mb-4">
+                        <label for="soLuongInput" class="form-label mb-0 me-3" style="min-width: 80px;">Số lượng:</label>
+                        <div class="d-flex align-items-center gap-1">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="thayDoiSoLuong(-1)">−</button>
+                            <input type="number" name="soLuong" id="soLuongInput" class="form-control text-center" value="1" min="1" max="{{ $sach->soLuong }}" style="width: 60px;">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="thayDoiSoLuong(1)">+</button>
+                        </div>
+                    </div>
+
+
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" formaction="{{ route('giohang.them') }}" class="btn btn-outline-brown rounded-pill px-4">
+                            <i class="fa fa-shopping-cart me-2"></i> Thêm vào giỏ
+                        </button>
+                        <button class="btn btn-danger rounded-pill px-4">Mua ngay</button>
+                    </div>
+                </form>
             </div>
 
             <!-- Thông tin cơ bản -->
             <div class="book-specs rounded shadow-sm bg-white p-4 mt-5">
-                <h5 class="fw-bold mb-3">Thông tin chi tiết</h5>
+                <h3 class="fw-bold mb-3">Thông tin chi tiết</h3>
                 <div class="table-responsive">
                     <table class="table table-borderless mb-0">
                         <tbody>
@@ -135,37 +156,22 @@
 
 
             <!-- Mua hàng -->
-            <form method="POST">
-                @csrf
-                <input type="hidden" name="maSach" value="{{ $sach->maSach }}">
-                <div class="d-flex align-items-center mb-4">
-                    <label for="soLuongInput" class="form-label mb-0 me-3" style="min-width: 80px;">Số lượng:</label>
-                    <div class="d-flex align-items-center gap-1">
-                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="thayDoiSoLuong(-1)">−</button>
-                        <input type="number" name="soLuong" id="soLuongInput" class="form-control text-center" value="1" min="1" max="{{ $sach->soLuong }}" style="width: 60px;">
-                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="thayDoiSoLuong(1)">+</button>
+            
+
+            <div class="product-description-box bg-white p-4 rounded-4 shadow-sm mt-5 border">
+                <h3 class="fw-bold mb-3">Mô tả sản phẩm</h3>
+
+                <div id="moTaContainer" class="description-collapsed">
+                    <div class="text-justify text-muted lh-lg" style="font-size: 1rem;">
+                        {!! nl2br(e($sach->mieuta)) !!}
                     </div>
                 </div>
 
-
-
-                <div class="d-flex gap-2">
-                    <button type="submit" formaction="{{ route('giohang.them') }}" class="btn btn-outline-brown rounded-pill px-4">
-                        <i class="fa fa-shopping-cart me-2"></i> Thêm vào giỏ
-                    </button>
-                    <button class="btn btn-danger rounded-pill px-4">Mua ngay</button>
-                </div>
-            </form>
-
-            <div class="product-description-box bg-light p-4 rounded mt-4 shadow-sm">
-                <h5 class="fw-bold mb-3">Mô tả sản phẩm</h5>
-                <div id="moTaContainer" class="description-collapsed">
-                    {!! nl2br(e($sach->mieuta)) !!}
-                </div>
-                <div class="text-end mt-2">
-                    <a href="javascript:void(0)" onclick="toggleMoTa()" id="moTaToggle" class="text-primary">Xem thêm</a>
+                <div class="text-center mt-3">
+                    <button class="btn btn-link text-decoration-none" onclick="toggleMoTa()" id="moTaToggle">Xem thêm ▼</button>
                 </div>
             </div>
+
 
             <script>
                 function toggleMoTa() {
@@ -188,6 +194,98 @@
         </div>
     </div>
 </div>
+
+<div class="container my-5">
+    <div class="rounded shadow-sm p-4 bg-white d-flex flex-column flex-md-row justify-content-between align-items-center review-summary-box">
+        <!-- Cột trái: Điểm trung bình -->
+        <div class="text-center mb-4 mb-md-0" style="min-width: 200px;">
+            <div class="fs-1 fw-bold text-dark">{{ number_format($trungBinhSao, 1) }}<span class="fs-4">/5</span></div>
+            <div class="text-warning fs-5">
+                @for($i = 1; $i <= 5; $i++)
+                    <i class="fa{{ $i <= $trungBinhSao ? 's' : 'r' }} fa-star"></i>
+                @endfor
+            </div>
+            <div class="text-muted mt-1">({{ $soDanhGia }} đánh giá)</div>
+        </div>
+
+        <!-- Cột phải: phân tích sao -->
+        <div class="flex-grow-1 px-md-5 w-100">
+            @for ($i = 5; $i >= 1; $i--)
+                @php
+                    $count = $sach->danhGias()->where('soSao', $i)->count();
+                    $percent = $soDanhGia > 0 ? round($count / $soDanhGia * 100) : 0;
+                @endphp
+                <div class="d-flex align-items-center mb-2">
+                    <div class="text-muted me-2" style="width: 50px;">{{ $i }} sao</div>
+                    <div class="progress flex-grow-1" style="height: 8px; background-color: #f1f1f1;">
+                        <div class="progress-bar bg-warning" style="width: {{ $percent }}%"></div>
+                    </div>
+                    <div class="ms-2" style="width: 40px;">{{ $percent }}%</div>
+                </div>
+            @endfor
+        </div>
+
+        <!-- Nút -->
+        <div class="text-center mt-3 mt-md-0">
+            <a href="#" class="btn btn-outline-danger rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                <i class="fa fa-pencil"></i> Viết đánh giá
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal đánh giá -->
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content p-4 rounded-3">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Viết đánh giá sản phẩm</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <form method="POST" action="{{ route('danhgia.submit') }}">
+        @csrf
+        <div class="modal-body">
+
+          <!-- Ngôi sao -->
+          <div class="text-center mb-4">
+    <label class="form-label fw-bold mb-2">Chọn số sao:</label><br>
+    <div class="rating-stars d-inline-flex flex-row-reverse justify-content-center" style="font-size: 32px;">
+        @for ($i = 5; $i >= 1; $i--)
+            <input type="radio" name="soSao" id="star{{ $i }}" value="{{ $i }}" class="d-none">
+            <label for="star{{ $i }}" class="star-label">
+                <i class="fa fa-star"></i>
+            </label>
+        @endfor
+    </div>
+</div>
+
+
+          <!-- Textarea -->
+          <div class="mb-2">
+            <label class="form-label fw-bold">Nhận xét</label>
+            <textarea name="nhanXet" id="nhanXet" class="form-control" rows="4" minlength="100"
+                      placeholder="Hãy chia sẻ cảm nhận chi tiết của bạn..." required></textarea>
+            <div class="form-text text-end mt-1">
+              <span id="charCount">0</span>/100 ký tự tối thiểu
+            </div>
+            <div class="text-danger mt-1 d-none" id="warning">Vui lòng nhập ít nhất 100 ký tự.</div>
+          </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer border-0 d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-danger px-4">Gửi nhận xét</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 
 <section id="featured-books" class="py-5 my-5">
 	<div class="container">
@@ -277,19 +375,69 @@
 
         toggleBtn.textContent = container.classList.contains('description-expanded') ? 'Thu gọn' : 'Xem thêm';
     }
+    
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const textarea = document.getElementById('nhanXet');
+    const countSpan = document.getElementById('charCount');
+    const warning = document.getElementById('warning');
+
+    textarea.addEventListener('input', function () {
+      const length = textarea.value.length;
+      countSpan.textContent = length;
+
+      if (length < 100) {
+        warning.classList.remove('d-none');
+      } else {
+        warning.classList.add('d-none');
+      }
+    });
+  });
 </script>
 <style>
+    .rating-stars .fa-star {
+        color: #ccc;
+        transition: color 0.2s;
+        cursor: pointer;
+    }
+
+    .rating-stars:hover label:hover ~ label .fa-star,
+    .rating-stars:hover label:hover .fa-star {
+        color: #FFD700 !important; /* Màu tím hover */
+    }
+
+    .rating-stars input[type="radio"]:checked ~ label .fa-star {
+        color: #FFD700; /* Màu tím khi chọn */
+    }
+
+    .rating-stars input[type="radio"]:checked ~ label ~ label .fa-star {
+        color: #FFD700;
+    }
+</style>
+
+<style>
 .description-collapsed {
-    max-height: 180px;
+    max-height: 240px;
     overflow: hidden;
-    position: relative;
-    mask-image: linear-gradient(180deg, #000 60%, transparent);
-    -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
-    transition: max-height 0.4s ease;
+    mask-image: linear-gradient(to bottom, black 70%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent);
+    transition: all 0.4s ease;
 }
 .description-expanded {
     max-height: none;
     mask-image: none;
     -webkit-mask-image: none;
+}
+.text-justify {
+    text-align: justify;
+}
+.text-brown {
+    color: #6e4d2e;
+}
+.review-summary-box {
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 </style>

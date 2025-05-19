@@ -62,7 +62,7 @@
 
 <div id="header-wrap">
 
-		<div class="top-content">
+		<!-- <div class="top-content">
 			<div class="container-fluid">
 				<div class="row ">
 					<div class="col-md-6">
@@ -81,13 +81,13 @@
 									<a href="#"><i class="icon icon-behance-square"></i></a>
 								</li>
 							</ul>
-						</div><!--social-links-->
+						</div>
 					</div>
 					
 
 				</div>
 			</div>
-		</div><!--top-content-->
+		</div>top-content -->
 
 		<header id="header">
 			<div class="container-fluid">
