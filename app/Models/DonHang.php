@@ -11,7 +11,7 @@ class Donhang extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'maND', 'tongTien', 'tinhTrang', 'phuongThucGH', 'diaChi', 'soDT', 'created_at'
+        'maND', 'tenNguoiNhan', 'tongTien', 'tinhTrang', 'phuongThucGH', 'diaChi', 'soDT', 'created_at', 'updated_at'
     ];
     public function nguoiDung() {
         return $this->belongsTo(Nguoidung::class, 'maND');

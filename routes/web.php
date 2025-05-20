@@ -10,6 +10,7 @@ use App\Http\Controllers\DanhGiaController;
 use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\VNPayController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 
@@ -91,11 +92,16 @@ Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallba
 Route::middleware('auth')->group(function () {
     Route::get('/dat-hang/thong-tin', [DonHangController::class, 'showStep1'])->name('dathang.step1');
     Route::post('/dat-hang/thong-tin', [DonHangController::class, 'handleStep1'])->name('dathang.step1.post');
+
     Route::get('/dat-hang/xac-nhan', [DonHangController::class, 'showStep2'])->name('dathang.step2');
     Route::post('/dat-hang/xac-nhan', [DonHangController::class, 'handleStep2'])->name('dathang.step2.post');
     
+    // 💳 Khởi tạo thanh toán VNPay (GET để redirect được)
+    Route::get('/vnpay-payment', [VnPayController::class, 'createPayment'])->name('vnpay.create');
 });
 
+// 🌐 Callback từ VNPay trả về (GET)
+Route::get('/vnpay-return', [VNPayController::class, 'handleReturn'])->name('vnpay.return');
 
 
 

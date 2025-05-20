@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         xaSelect.innerHTML = `<option value="">-- Chọn phường/xã --</option>`;
 
         Object.values(dsXa).filter(x => x.parent_code === maHuyen).forEach(x => {
-            xaSelect.innerHTML += `<option value="${x.name}">${x.name}</option>`;
+            xaSelect.innerHTML += `<option value="${x.code}">${x.name}</option>`; // ✅ FIXED
         });
     });
 });

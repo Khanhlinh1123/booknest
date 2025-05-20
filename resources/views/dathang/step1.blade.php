@@ -24,7 +24,7 @@
 
                     <div class="mb-3">
                         <label for="ten" class="form-label fw-semibold">Họ và tên</label>
-                        <input type="text" name="ten" id="tenND" class="form-control" required value="{{ old('ten', Auth::user()->tenND ?? '') }}">
+                        <input type="text" name="ten" id="ten" class="form-control" required value="{{ old('ten', Auth::user()->tenND ?? '') }}">
                     </div>
 
                     <div class="mb-3">
