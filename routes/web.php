@@ -11,6 +11,7 @@ use App\Http\Controllers\BaiVietController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\VNPayController;
+use App\Http\Controllers\MomoController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 
@@ -90,19 +91,21 @@ Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dat-hang/thong-tin', [DonHangController::class, 'showStep1'])->name('dathang.step1');
-    Route::post('/dat-hang/thong-tin', [DonHangController::class, 'handleStep1'])->name('dathang.step1.post');
+    // Trang thanh toán
+    Route::get('/thanh-toan', [DonHangController::class, 'showThanhToan'])->name('checkout');
+    Route::post('/thanh-toan', [DonHangController::class, 'handleThanhToan'])->name('checkout.post');
 
-    Route::get('/dat-hang/xac-nhan', [DonHangController::class, 'showStep2'])->name('dathang.step2');
-    Route::post('/dat-hang/xac-nhan', [DonHangController::class, 'handleStep2'])->name('dathang.step2.post');
-    
-    // 💳 Khởi tạo thanh toán VNPay (GET để redirect được)
+    // VNPAY
     Route::get('/vnpay-payment', [VnPayController::class, 'createPayment'])->name('vnpay.create');
+
+
+    // MOMO callback
+    Route::get('/thanh-toan/momo/callback', [MomoController::class, 'momoCallback'])->name('momo.callback');
 });
 
-// 🌐 Callback từ VNPay trả về (GET)
-Route::get('/vnpay-return', [VNPayController::class, 'handleReturn'])->name('vnpay.return');
 
+// 📩 IPN (callback server → server)
+Route::post('/momo/ipn', [MomoController::class, 'handleIpn'])->name('momo.ipn');
 
 
 require __DIR__.'/auth.php';

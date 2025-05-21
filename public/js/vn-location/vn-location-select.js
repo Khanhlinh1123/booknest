@@ -19,6 +19,31 @@ document.addEventListener('DOMContentLoaded', function () {
         Object.values(dsTinh).forEach(t => {
             tinhSelect.innerHTML += `<option value="${t.code}">${t.name}</option>`;
         });
+
+        // 👉 PHỤC HỒI old() nếu có (tỉnh/huyện/xã)
+        const oldTinh = tinhSelect.dataset.old;
+        const oldHuyen = huyenSelect.dataset.old;
+        const oldXa = xaSelect.dataset.old;
+
+        if (oldTinh) {
+            tinhSelect.value = oldTinh;
+
+            Object.values(dsHuyen).filter(h => h.parent_code === oldTinh).forEach(h => {
+                huyenSelect.innerHTML += `<option value="${h.code}">${h.name}</option>`;
+            });
+
+            if (oldHuyen) {
+                huyenSelect.value = oldHuyen;
+
+                Object.values(dsXa).filter(x => x.parent_code === oldHuyen).forEach(x => {
+                    xaSelect.innerHTML += `<option value="${x.code}">${x.name}</option>`;
+                });
+
+                if (oldXa) {
+                    xaSelect.value = oldXa;
+                }
+            }
+        }
     });
 
     // Khi chọn tỉnh → load huyện
@@ -38,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         xaSelect.innerHTML = `<option value="">-- Chọn phường/xã --</option>`;
 
         Object.values(dsXa).filter(x => x.parent_code === maHuyen).forEach(x => {
-            xaSelect.innerHTML += `<option value="${x.code}">${x.name}</option>`; // ✅ FIXED
+            xaSelect.innerHTML += `<option value="${x.code}">${x.name}</option>`;
         });
     });
 });

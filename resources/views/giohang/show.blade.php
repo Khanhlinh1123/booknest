@@ -8,7 +8,7 @@
     <h2 class="mb-4" style="color: #2e8b57;">🛒 Giỏ hàng của bạn</h2>
 
     @if ($items->count() > 0)
-    <form action="{{ route('dathang.step1') }}" method="GET" id="form-dat-hang">
+    <form action="{{ route('checkout') }}" method="GET" id="form-dat-hang">
     <div class="table-responsive bg-white p-3 rounded shadow-sm">
                 <table class="table table-hover align-middle" id="cart-table">
                     <thead class="table-light">
