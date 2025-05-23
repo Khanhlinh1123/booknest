@@ -1,11 +1,37 @@
 @include('header')
 
 <style>
-/* giữ nguyên style như bạn gửi */
+#action-fixed {
+    z-index: 1050;
+    transition: all 0.3s ease;
+}
+#btn-dat-hang:disabled {
+    background-color: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+}
+.breadcrumb a {
+    color:rgb(96, 64, 4);
+    text-decoration: none;
+}
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
 </style>
 
+<div class="breadcrumb-banner text-white d-flex align-items-center" style="">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{{ route('home') }}">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
 <div class="container my-5">
-    <h2 class="mb-4" style="color: #2e8b57;">🛒 Giỏ hàng của bạn</h2>
+    <h2 class="mb-4" style="color: #2e8b57;">Giỏ hàng của bạn</h2>
 
     @if ($items->count() > 0)
     <form action="{{ route('checkout') }}" method="GET" id="form-dat-hang">
@@ -74,9 +100,11 @@
                 </table>
             </div>
 
-            <div class="text-end mt-3">
-                <button type="submit" class="btn btn-primary">Tiến hành đặt hàng</button>
+            <div id="action-fixed" class="bg-white shadow-lg border-top p-3 fixed-bottom d-flex justify-content-between align-items-center" style="display: none;">
+                <div class="fw-bold fs-5">Tổng tiền: <span id="tong-tien-chon" class="text-success">0₫</span></div>
+                <button id="btn-dat-hang" class="btn btn-primary px-4 rounded-pill" disabled>Tiến hành đặt hàng</button>
             </div>
+
         </form>
     @else
         <div class="alert alert-info">
@@ -184,4 +212,50 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+function capNhatGiaoDienChon() {
+    const checkboxes = document.querySelectorAll('.chon-sach:checked');
+    const khuVuc = document.getElementById('action-fixed');
+    const tongTienText = document.getElementById('tong-tien-chon');
+    const btnDatHang = document.getElementById('btn-dat-hang');
+
+    let tong = 0;
+
+    checkboxes.forEach(cb => {
+        const tr = cb.closest('tr');
+        const soLuong = parseInt(tr.querySelector('.so-luong').innerText);
+        const donGia = parseInt(tr.querySelector('.don-gia').dataset.dongia);
+        tong += soLuong * donGia;
+    });
+
+    tongTienText.innerText = tong.toLocaleString('vi-VN') + '₫';
+
+    if (checkboxes.length > 0) {
+        khuVuc.style.display = 'flex';
+        btnDatHang.disabled = false;
+    } else {
+        tongTienText.innerText = '0₫';
+        btnDatHang.disabled = true;
+        khuVuc.style.display = 'none';
+    }
+}
+
+// Bắt sự kiện tick chọn từng sản phẩm
+document.querySelectorAll('.chon-sach').forEach(cb => {
+    cb.addEventListener('change', capNhatGiaoDienChon);
+});
+
+// Bắt sự kiện "chọn tất cả"
+document.getElementById('chon-tat-ca')?.addEventListener('change', function () {
+    const checkboxes = document.querySelectorAll('.chon-sach');
+    checkboxes.forEach(cb => {
+        cb.checked = this.checked;
+    });
+    capNhatGiaoDienChon();
+});
+
+// Sự kiện click nút cố định
+document.getElementById('btn-dat-hang').addEventListener('click', function () {
+    document.getElementById('form-dat-hang').submit();
+});
+
 </script>

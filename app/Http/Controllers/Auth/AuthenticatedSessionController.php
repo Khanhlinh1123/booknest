@@ -44,6 +44,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = Auth::user();
+        
 
         // ❗ Kiểm tra xác minh email
         if (is_null($user->email_verified_at)) {
@@ -82,7 +83,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         return $user->phanQuyen === 'admin'
-            ? redirect()->route('dashboard')
+            ? redirect()->route('admin.dashboard')
             : redirect()->route('home');
     }
 

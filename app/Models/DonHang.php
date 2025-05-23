@@ -20,4 +20,8 @@ class Donhang extends Model
     public function sachs() {
         return $this->belongsToMany(Sach::class, 'chitietdonhang', 'maDH', 'maSach');
     }
+    public function chitiet()
+{
+    return $this->hasMany(\App\Models\ChiTietDonHang::class, 'maDH', 'maDH');
+}
 }

@@ -13,7 +13,10 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\VNPayController;
 use App\Http\Controllers\MomoController;
 use App\Http\Controllers\Auth\NewPasswordController;
+
 use App\Http\Controllers\Auth\VerifyEmailController;
+
+use App\Http\Controllers\Admin\DanhMucController;
 
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Verified;    
@@ -33,10 +36,71 @@ use App\Http\Controllers\SocialController;
 */
 
 
+Route::prefix('quan-tri')->middleware(['auth', 'is_admin'])->name('admin.')->group(function () {
+    Route::get('/', function () {
+        return view('admin.dashboard');    
+    })->name('admin.dashboard');
+       
+    Route::get('/basic-table', function () {
+        return view('basic-table');
+    });
+    
+    Route::resource('danhmuc', App\Http\Controllers\Admin\DanhMucController::class);
+    Route::resource('sach', App\Http\Controllers\Admin\SachController::class);
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/compose', function () {
+        return view('compose');
+    });
+    
+    Route::get('/calendar', function () {
+        return view('calendar');
+    });
+    
+    Route::get('/chat', function () {
+        return view('chat');
+    });
+    
+    Route::get('/charts', function () {
+        return view('charts');
+    });
+    
+    Route::get('/forms', function () {
+        return view('forms');
+    });
+    
+    Route::get('/ui', function () {
+        return view('ui');
+    });
+    
+    Route::get('/datatable', function () {
+        return view('datatable');
+    });
+    
+    Route::get('/google-maps', function () {
+        return view('google-maps');
+    });
+    
+    Route::get('/vector-maps', function () {
+        return view('vector-maps');
+    });
+    
+    Route::get('/blank', function () {
+        return view('blank');
+    });
+    
+    Route::get('/404', function () {
+        return view('404');
+    });
+    
+    Route::get('/500', function () {
+        return view('500');
+    });
+    
+});
+Route::get('/test-admin', function () {
+    return 'TEST ADMIN';
+})->middleware(['auth', 'is_admin'])->name('admin.test');
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -50,6 +114,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/don-hang', [DonHangController::class, 'index'])->name('donhang.index');
+    Route::get('/nhan-xet', [DanhGiaController::class, 'index'])->name('nhanxet.index');
+    Route::post('/nhan-xet', [DanhGiaController::class, 'store'])->name('nhanxet.store');
+    Route::get('/nhan-xet/{id}/edit', [DanhGiaController::class, 'edit'])->name('nhanxet.edit');
+    Route::patch('/nhan-xet/{id}', [DanhGiaController::class, 'update'])->name('nhanxet.update');
+    
 });
 use App\Http\Controllers\Auth\RegisteredUserController;
 
@@ -106,6 +176,7 @@ Route::middleware('auth')->group(function () {
 
 // 📩 IPN (callback server → server)
 Route::post('/momo/ipn', [MomoController::class, 'handleIpn'])->name('momo.ipn');
+
 
 
 require __DIR__.'/auth.php';

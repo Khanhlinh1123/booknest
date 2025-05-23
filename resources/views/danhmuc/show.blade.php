@@ -1,7 +1,5 @@
 @include('header')
-<div class="banner-container mb-4">
-    <img src="{{ asset('images/banner1.jpg') }}" alt="Banner Sách Mới" class="img-fluid w-100" style="max-height: 300px; object-fit: cover;">
-</div>
+
 <style>
     .sort-bar a {
         border-radius: 20px;
@@ -63,8 +61,37 @@
     font-family: 'Times New Roman', Times, serif;
     
 }
+.breadcrumb a {
+    color:rgb(96, 64, 4);
+    text-decoration: none;
+}
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
 
 </style>
+<div class="breadcrumb-banner d-flex align-items-center" style="
+    background-image: url('{{ asset('images/banner1.jpg') }}');
+    background-size: cover;
+    background-position: center;
+    min-height: 200px;
+    position: relative;
+">
+    <div class="overlay" style="
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+    "></div>
+
+    <div class="container position-relative text-white">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-transparent p-0 m-0">
+                <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-white text-decoration-none"><b>Trang chủ</b></a></li>
+                <li class="breadcrumb-item active text-white" aria-current="page">{{ $danhmuc->tenDM }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
 
 
 <div class="container my-5">

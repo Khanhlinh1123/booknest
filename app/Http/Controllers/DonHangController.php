@@ -126,4 +126,15 @@ class DonHangController extends Controller
 
         return view('dathang.thankyou', compact('donHang'));
     }
+    public function index()
+{
+    $donhangs = DonHang::with('chitiet.sach')
+                ->where('maND', auth()->id())
+                ->latest()
+                ->get();
+
+    return view('profile.donhang', compact('donhangs'))->with('user', auth()->user());
+    ;
+}
+
 }

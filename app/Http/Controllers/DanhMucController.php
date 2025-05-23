@@ -63,7 +63,7 @@ if ($request->sort === 'price_asc') {
 
 // Phân trang thủ công sau khi sort
 $page = request()->get('page', 1);
-$perPage = 8;
+$perPage = 12;
 $sachs = new \Illuminate\Pagination\LengthAwarePaginator(
     $sachs->forPage($page, $perPage),
     $sachs->count(),

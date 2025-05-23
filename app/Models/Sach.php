@@ -11,7 +11,7 @@ class Sach extends Model
 
     protected $fillable = [
         'tenSach', 'giaGoc', 'maNXB', 'maTG', 'namXB',
-        'soLuong', 'kichThuoc', 'hinhanh', 'mieuta', 'maKM'
+        'soLuong', 'kichThuoc', 'hinhanh', 'mieuta', 'maKM', 'slug', 'maDM'
     ];
     
 

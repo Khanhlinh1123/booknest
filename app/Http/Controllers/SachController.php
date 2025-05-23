@@ -96,7 +96,7 @@ class SachController extends Controller
 
         // Phân trang thủ công
         $page = $request->get('page', 1);
-        $perPage = 8;
+        $perPage = 12;
         $sachs = new \Illuminate\Pagination\LengthAwarePaginator(
             $sachs->forPage($page, $perPage),
             $sachs->count(),
