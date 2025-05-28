@@ -12,6 +12,7 @@ class BaiViet extends Model
     use HasFactory;
 
     protected $table = 'baiviet';
+    protected $primaryKey = 'maBV'; // 👈 THÊM DÒNG NÀY
 
     protected $fillable = [
         'tieuDe',
@@ -19,7 +20,7 @@ class BaiViet extends Model
         'tomTat',
         'noiDung',
         'anhBia',
-        'nguoi_dung_id',
+        'maND',
     ];
 
     

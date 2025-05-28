@@ -14,5 +14,9 @@ class KhuyenMai extends Model
         'tenKM', 'moTa', 'loaiGiam', 'giaTri', 'batDau', 'ketThuc'
     ];
 
-    
+    public function sachs()
+    {
+        return $this->hasMany(Sach::class, 'maKM', 'maKM');
+    }
+
 }

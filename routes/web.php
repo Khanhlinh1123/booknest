@@ -12,12 +12,12 @@ use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\VNPayController;
 use App\Http\Controllers\MomoController;
+
 use App\Http\Controllers\Auth\NewPasswordController;
 
 use App\Http\Controllers\Auth\VerifyEmailController;
 
-use App\Http\Controllers\Admin\DanhMucController;
-
+use App\Http\Controllers\Admin\DanhMucController;   
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Verified;    
 use Illuminate\Auth\Notifications\VerifyEmail;
@@ -39,7 +39,7 @@ use App\Http\Controllers\SocialController;
 Route::prefix('quan-tri')->middleware(['auth', 'is_admin'])->name('admin.')->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');    
-    })->name('admin.dashboard');
+    })->name('dashboard');
        
     Route::get('/basic-table', function () {
         return view('basic-table');
@@ -47,6 +47,12 @@ Route::prefix('quan-tri')->middleware(['auth', 'is_admin'])->name('admin.')->gro
     
     Route::resource('danhmuc', App\Http\Controllers\Admin\DanhMucController::class);
     Route::resource('sach', App\Http\Controllers\Admin\SachController::class);
+    Route::resource('baiviet', App\Http\Controllers\Admin\BaiVietController::class);
+    Route::post('baiviet/upload', [App\Http\Controllers\Admin\BaiVietController::class, 'upload'])->name('baiviet.upload');
+    Route::resource('khuyenmai', App\Http\Controllers\Admin\KhuyenMaiController::class);
+    Route::get('khuyenmai/{id}/sach', [App\Http\Controllers\Admin\KhuyenMaiController::class, 'products'])->name('khuyenmai.sach');
+    Route::get('donhang', [App\Http\Controllers\Admin\DonHangController::class, 'index'])->name('donhang.index');
+    Route::post('donhang/{id}/cap-nhat-trang-thai', [App\Http\Controllers\Admin\DonHangController::class, 'capNhatTrangThai'])->name('donhang.updateStatus');
 
     Route::get('/compose', function () {
         return view('compose');

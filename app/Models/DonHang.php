@@ -21,7 +21,22 @@ class Donhang extends Model
         return $this->belongsToMany(Sach::class, 'chitietdonhang', 'maDH', 'maSach');
     }
     public function chitiet()
-{
-    return $this->hasMany(\App\Models\ChiTietDonHang::class, 'maDH', 'maDH');
-}
+    {
+        return $this->hasMany(\App\Models\ChiTietDonHang::class, 'maDH', 'maDH');
+    }
+
+    public static function tinhTrangList()
+    {
+        return [
+            0 => 'Chờ xử lý',
+            1 => 'Đang vận chuyển',
+            2 => 'Đã giao',
+            3 => 'Đã hủy'
+        ];
+    }
+
+    public function getTenTinhTrangAttribute()
+    {
+        return self::tinhTrangList()[$this->tinhTrang] ?? 'Không xác định';
+    }
 }

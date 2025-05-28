@@ -43,13 +43,13 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="sidebar-link" href="/calendar">
+            <a class="sidebar-link" href="{{ route('admin.baiviet.index') }}">
                 <span class="icon-holder"><i class="fas fa-newspaper c-deep-orange-500"></i></span>
                 <span class="title">Quản lý bài viết</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="sidebar-link" href="/chat">
+            <a class="sidebar-link" href="{{ route('admin.khuyenmai.index') }}">
                 <span class="icon-holder"><i class="fas fa-tags c-deep-purple-500"></i></span>
                 <span class="title">Quản lý khuyến mại</span>
             </a>
@@ -61,7 +61,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="sidebar-link" href="/forms">
+            <a class="sidebar-link" href="{{ route('admin.donhang.index') }}">
                 <span class="icon-holder"><i class="fas fa-shopping-cart c-light-blue-500"></i></span>
                 <span class="title">Quản lý đơn hàng</span>
             </a>
