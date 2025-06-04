@@ -14,6 +14,7 @@ use App\Http\Controllers\VNPayController;
 use App\Http\Controllers\MomoController;
 
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Admin\DashboardController;
 
 use App\Http\Controllers\Auth\VerifyEmailController;
 
@@ -37,9 +38,8 @@ use App\Http\Controllers\SocialController;
 
 
 Route::prefix('quan-tri')->middleware(['auth', 'is_admin'])->name('admin.')->group(function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');    
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
+
        
     Route::get('/basic-table', function () {
         return view('basic-table');
@@ -48,6 +48,8 @@ Route::prefix('quan-tri')->middleware(['auth', 'is_admin'])->name('admin.')->gro
     Route::resource('danhmuc', App\Http\Controllers\Admin\DanhMucController::class);
     Route::resource('sach', App\Http\Controllers\Admin\SachController::class);
     Route::resource('baiviet', App\Http\Controllers\Admin\BaiVietController::class);
+    Route::resource('tacgia', App\Http\Controllers\Admin\TacGiaController::class);
+    Route::resource('nhaxuatban', App\Http\Controllers\Admin\NXBController::class);
     Route::post('baiviet/upload', [App\Http\Controllers\Admin\BaiVietController::class, 'upload'])->name('baiviet.upload');
     Route::resource('khuyenmai', App\Http\Controllers\Admin\KhuyenMaiController::class);
     Route::get('khuyenmai/{id}/sach', [App\Http\Controllers\Admin\KhuyenMaiController::class, 'products'])->name('khuyenmai.sach');

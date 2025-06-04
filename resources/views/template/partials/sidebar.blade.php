@@ -66,63 +66,20 @@
                 <span class="title">Quản lý đơn hàng</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="sidebar-link" href="{{ route('admin.tacgia.index') }}">
+                <span class="icon-holder"><i class="fas fa-user-edit c-indigo-500"></i></span>
+                <span class="title">Quản lý tác giả</span>
+            </a>
+        </li>
 
-            <li class="nav-item dropdown"><a class="sidebar-link" href="/ui"><span class="icon-holder"><i class="fas fa-palette c-pink-500"></i></span><span class="title">UI Elements</span></a></li>
-            <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
-                    <span class="icon-holder"><i class="fas fa-table c-orange-500"></i></span>
-                    <span class="title">Tables</span>
-                    <span class="arrow"><i class="fas fa-angle-right"></i></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="sidebar-link" href="/basic-table">Basic Table</a></li>
-                    <li><a class="sidebar-link" href="/datatable">Data Table</a></li>
-                </ul>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
-                    <span class="icon-holder"><i class="fas fa-map c-purple-500"></i></span>
-                    <span class="title">Maps</span>
-                    <span class="arrow"><i class="fas fa-angle-right"></i></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/google-maps">Google Map</a></li>
-                    <li><a href="/vector-maps">Vector Map</a></li>
-                </ul>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
-                    <span class="icon-holder"><i class="fas fa-file-alt c-red-500"></i></span>
-                    <span class="title">Pages</span>
-                    <span class="arrow"><i class="fas fa-angle-right"></i></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="sidebar-link" href="/blank">Blank</a></li>
-                    <li><a class="sidebar-link" href="/404">404</a></li>
-                    <li><a class="sidebar-link" href="/500">500</a></li>
-                    <li><a class="sidebar-link" href="/signin">Sign In</a></li>
-                    <li><a class="sidebar-link" href="/signup">Sign Up</a></li>
-                </ul>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
-                    <span class="icon-holder"><i class="fas fa-layer-group c-teal-500"></i></span>
-                    <span class="title">Multiple Levels</span>
-                    <span class="arrow"><i class="fas fa-angle-right"></i></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class="nav-item dropdown"><a href="javascript:void(0);"><span>Menu Item</span></a></li>
-                    <li class="nav-item dropdown">
-                        <a href="javascript:void(0);"><span>Menu Item</span>
-                            <span class="arrow"><i class="fas fa-angle-right"></i></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="javascript:void(0);">Menu Item</a></li>
-                            <li><a href="javascript:void(0);">Menu Item</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
+        <li class="nav-item">
+            <a class="sidebar-link" href="{{ route('admin.nhaxuatban.index') }}">
+                <span class="icon-holder"><i class="fas fa-building c-amber-500"></i></span>
+                <span class="title">Quản lý NXB</span>
+            </a>
+        </li>
+ 
         </ul>
     </div>
 </div>

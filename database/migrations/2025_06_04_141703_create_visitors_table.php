@@ -9,20 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-{
-    Schema::table('donhang', function (Blueprint $table) {
-        $table->timestamps(); // tự động thêm 2 cột created_at và updated_at
-    });
-}
+    public function up(): void
+    {
+        Schema::create('visitors', function (Blueprint $table) {
+            $table->id();
+            $table->string('ip_address')->nullable();
+            $table->date('date');
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('donhang', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('visitors');
     }
 };

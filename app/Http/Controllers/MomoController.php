@@ -82,47 +82,64 @@ class MomoController extends Controller
 {
     Log::info('MoMo callback:', $request->all());
 
-    if ($request->resultCode == 0) {
-        // Giao dịch thành công → tạo đơn hàng tại đây
-        $session = session('tam_thanh_toan');
+    switch ($request->resultCode) {
+        case 0:
+            // Giao dịch thành công → tạo đơn hàng
+            $session = session('tam_thanh_toan');
 
-        if (!$session) {
-            return view('payment.momo_callback')->with('error', 'Không tìm thấy phiên thanh toán.');
-        }
+            if (!$session) {
+                return view('payment.momo_callback', [
+                    'data' => $request->all(),
+                    'error' => 'Không tìm thấy phiên thanh toán.'
+                ]);
+            }
 
-        $user = auth()->user();
-        $gioHang = $session['gioHang'];
-        $thongTin = $session['thongTin'];
-        $tongTien = $request->amount;
+            $user = auth()->user();
+            $gioHang = $session['gioHang'];
+            $thongTin = $session['thongTin'];
+            $tongTien = $request->amount;
 
-        $donHang = DonHang::create([
-            'maND' => $user->maND,
-            'tenNguoiNhan' => $thongTin['ten'],
-            'soDT' => $thongTin['soDT'],
-            'diaChi' => $thongTin['diaChiFull'],
-            'tongTien' => $tongTien,
-            'phuongThucGH' => 'momo',
-            'tinhTrang' => 'Đang xử lý',
-        ]);
-
-        foreach ($gioHang as $item) {
-            ChiTietDonHang::create([
-                'maDH' => $donHang->maDH,
-                'maSach' => $item['sach']->maSach,
-                'soLuong' => $item['soLuong'],
-                'giaMua' => $item['sach']->giaDaGiam,
+            $donHang = DonHang::create([
+                'maND' => $user->maND,
+                'tenNguoiNhan' => $thongTin['ten'],
+                'soDT' => $thongTin['soDT'],
+                'diaChi' => $thongTin['diaChiFull'],
+                'tongTien' => $tongTien,
+                'phuongThucGH' => 'momo',
+                'tinhTrang' => 'Đang xử lý',
             ]);
 
-            $item['sach']->soLuong -= $item['soLuong'];
-            $item['sach']->save();
-        }
+            foreach ($gioHang as $item) {
+                ChiTietDonHang::create([
+                    'maDH' => $donHang->maDH,
+                    'maSach' => $item['sach']->maSach,
+                    'soLuong' => $item['soLuong'],
+                    'giaMua' => $item['sach']->giaDaGiam,
+                ]);
 
-        session()->forget(['gioHangDat', 'tam_thanh_toan']);
+                $item['sach']->soLuong -= $item['soLuong'];
+                $item['sach']->save();
+            }
 
-        return view('dathang.thankyou', compact('donHang'));
+            session()->forget(['gioHangDat', 'tam_thanh_toan']);
+
+            return view('dathang.thankyou', compact('donHang'));
+
+        case 7002:
+            // Giao dịch đang xử lý từ ngân hàng
+            return view('payment.momo_callback', [
+                'data' => $request->all(),
+                'error' => 'Giao dịch đang được xử lý từ phía ngân hàng. Vui lòng kiểm tra lại sau hoặc liên hệ nếu cần hỗ trợ.'
+            ]);
+
+        default:
+            // Giao dịch thất bại hoặc bị huỷ
+            return view('payment.momo_callback', [
+                'data' => $request->all(),
+                'error' => 'Thanh toán thất bại hoặc bị huỷ.'
+            ]);
     }
-
-    return view('payment.momo_callback')->with('error', 'Giao dịch thất bại hoặc bị huỷ.');
 }
+
 
 }
