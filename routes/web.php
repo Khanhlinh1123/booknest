@@ -37,6 +37,7 @@ use App\Http\Controllers\SocialController;
 |
 */
 
+Route::view('/chatbot', 'chat');
 
 Route::prefix('quan-tri')->middleware(['auth', 'is_admin'])->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');

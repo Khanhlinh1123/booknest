@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Models\Sach;
 
+Route::post('/chatbot', [\App\Http\Controllers\Api\ChatBotController::class, 'handle'])->name('api.chatbot');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

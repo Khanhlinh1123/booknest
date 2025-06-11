@@ -467,6 +467,8 @@ Dù bạn là người mê văn học, say mê triết lý hay đang kiếm tìm
 
 	
 @include( 'footer');
+@include('components.chat-bubble')
+
 
 	<!-- JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
