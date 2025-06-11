@@ -24,12 +24,13 @@
         </div>
 
         <ul class="sidebar-menu scrollable pos-r">
-        <li class="nav-item mT-30 actived">
-            <a class="sidebar-link" href="/">
+        <li class="nav-item mT-30 {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+            <a class="sidebar-link" href="{{ route('admin.dashboard') }}">
                 <span class="icon-holder"><i class="fas fa-tachometer-alt c-blue-500"></i></span>
                 <span class="title">Dashboard</span>
             </a>
         </li>
+
         <li class="nav-item">
             <a class="sidebar-link" href="{{ route('admin.danhmuc.index') }}">
                 <span class="icon-holder"><i class="fas fa-list-alt c-brown-500"></i></span>
@@ -79,6 +80,13 @@
                 <span class="title">Quản lý NXB</span>
             </a>
         </li>
+        <li class="nav-item {{ request()->routeIs('admin.phieunhap.*') ? 'active' : '' }}">
+            <a class="sidebar-link" href="{{ route('admin.phieunhap.create') }}">
+                <span class="icon-holder"><i class="fas fa-file-import c-green-500"></i></span>
+                <span class="title">Nhập hàng</span>
+            </a>
+            </li>
+
  
         </ul>
     </div>

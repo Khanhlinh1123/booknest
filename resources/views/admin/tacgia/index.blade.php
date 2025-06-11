@@ -29,5 +29,7 @@
             @endforeach
         </tbody>
     </table>
+    {{ $tacgias->links() }}
+
 </div>
 @endsection

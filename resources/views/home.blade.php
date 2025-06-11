@@ -104,6 +104,64 @@
 			</div>
 		</div>
 
+		<section id="featured-books" class="py-5 my-5">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<div class="section-header align-center">
+					<div class="title">
+						<span></span>
+					</div>
+					<h2 class="section-title">Sách được mua nhiều nhất</h2>
+				</div>
+
+				<div class="product-list" data-aos="fade-up">
+					<div class="row">
+
+						@foreach($top5Sach as $sach)
+						<div class="col-md-2-4">
+							<div class="product-item">
+								<figure class="product-style">
+								<a href="{{ route('sach.show', $sach->slug) }}">
+									<img src="{{ asset('images/sach/' . $sach->hinhanh) }}" alt="{{ $sach->tenSach }}" class="product-item" style="width: 100%; height: 350px; object-fit: cover;">
+								</a>									
+								<form action="{{ route('giohang.them') }}" method="POST" style="display: inline;">
+										@csrf
+										<input type="hidden" name="maSach" value="{{ $sach->maSach }}">
+										<input type="hidden" name="soLuong" value="1">
+										<button type="submit" class="add-to-cart" data-product-tile="add-to-cart">Thêm vào giỏ</button>
+									</form>
+
+								</figure>
+								<figcaption>
+								<h3>
+									<a href="{{ route('sach.show', $sach->slug) }}" class="text-decoration-none text-dark">
+										{{ $sach->tenSach }}
+									</a>
+								</h3>
+									<span>{{ $sach->tacGia->tenTG ?? 'Không rõ' }}</span>
+									<div class="item-price">
+										@if($sach->giaDaGiam < $sach->giaGoc)
+										
+									<span class="prev-price">{{ number_format($sach->giaGoc) }}₫</span>
+											&nbsp;
+											<span >{{ number_format($sach->giaDaGiam) }}₫</span>
+										@else
+											{{ number_format($sach->giaGoc) }}₫
+										@endif
+									</div>
+								</figcaption>
+							</div>
+						</div>
+						@endforeach
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+
 		<div class="row">
 			<div class="col-md-12">
 				<div class="btn-wrap align-right">

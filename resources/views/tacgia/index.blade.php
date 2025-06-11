@@ -3,7 +3,7 @@
     <img src="{{ asset('images/banner1.jpg') }}" alt="Banner Sách Mới" class="img-fluid w-100" style="max-height: 300px; object-fit: cover;">
 </div>
 <div class="container my-5">
-    <h2 class="mb-4 ">📚 Tác giả</h2>
+    <h2 class="mb-4 ">TÁC GIẢ</h2>
 
     <div class="row g-4">
         @foreach ($tacgias as $tacgia)

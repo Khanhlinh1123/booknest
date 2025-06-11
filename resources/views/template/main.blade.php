@@ -50,6 +50,8 @@
     {{-- Đường dẫn JS --}}
     <script src="{{ asset('adminator/vendor.js') }}"></script>
     <script src="{{ asset('adminator/bundle.js') }}"></script>
+    @yield('scripts')
+
 </body>
 
 </html>

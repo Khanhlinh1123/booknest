@@ -5,6 +5,7 @@ use App\Models\DanhMuc;
 use App\Models\Sach;
 use App\Models\TacGia;
 use App\Models\BaiViet;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -18,9 +19,17 @@ public function index() {
     $sachMoi = Sach::with('khuyenMai')->orderBy('created_at', 'desc')->take(5)->get();
     $tacgias = TacGia::orderBy('maTG')->take(5)->get();
     $top3BaiViet = BaiViet::latest('created_at')->take(3)->with('nguoiDung')->get();
+     $top5BanChay = DB::table('chitietdonhang')
+        ->select('maSach', DB::raw('SUM(soLuong) as tongSoLuong'))
+        ->groupBy('maSach')
+        ->orderByDesc('tongSoLuong')
+        ->take(5)
+        ->get();
+
+    $top5Sach = Sach::with('khuyenMai')->whereIn('maSach', $top5BanChay->pluck('maSach'))->get();
 
 
-    return view('home', compact('danhmucs','sachMoi','tacgias','top3BaiViet'));
+    return view('home', compact('danhmucs','sachMoi','tacgias','top3BaiViet', 'top5Sach'));
 }
 public function timKiem(Request $request) {
     $keyword = $request->tuKhoa;

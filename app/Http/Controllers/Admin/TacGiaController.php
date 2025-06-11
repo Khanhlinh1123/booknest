@@ -17,8 +17,8 @@ class TacGiaController extends Controller
 
     public function store(Request $request) {
         $request->validate(['tenTG' => 'required|string|max:255']);
-        TacGia::create($request->all());
-        return redirect()->route('admin.tacgia.index')->with('success', 'Thêm tác giả thành công.');
+    TacGia::create($request->only('tenTG', 'slug'));        
+    return redirect()->route('admin.tacgia.index')->with('success', 'Thêm tác giả thành công.');
     }
 
     public function edit($id) {

@@ -15,6 +15,7 @@ use App\Http\Controllers\MomoController;
 
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PhieuNhapController;
 
 use App\Http\Controllers\Auth\VerifyEmailController;
 
@@ -55,6 +56,10 @@ Route::prefix('quan-tri')->middleware(['auth', 'is_admin'])->name('admin.')->gro
     Route::get('khuyenmai/{id}/sach', [App\Http\Controllers\Admin\KhuyenMaiController::class, 'products'])->name('khuyenmai.sach');
     Route::get('donhang', [App\Http\Controllers\Admin\DonHangController::class, 'index'])->name('donhang.index');
     Route::post('donhang/{id}/cap-nhat-trang-thai', [App\Http\Controllers\Admin\DonHangController::class, 'capNhatTrangThai'])->name('donhang.updateStatus');
+Route::get('phieunhap/create', [PhieuNhapController::class, 'create'])
+     ->name('phieunhap.create');
+Route::post('phieunhap',       [PhieuNhapController::class, 'store'])
+     ->name('phieunhap.store');
 
     Route::get('/compose', function () {
         return view('compose');
