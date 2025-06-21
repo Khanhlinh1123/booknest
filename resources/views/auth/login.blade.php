@@ -70,10 +70,10 @@
                         <li>🎁 Tích điểm đổi quà</li>
                         <li>💸 Giảm giá cho lần mua tiếp theo lên đến 10%</li>
                     </ul>
-                    <div class="d-flex justify-content-center mt-4">
+                    <div class="d-grid mb-3" style="place-items: center;">
                         <a href="{{ route('register') }}"
-                           class="btn fw-bold rounded-pill shadow-sm py-2 text-white w-75"
-                           style="background-color: #7B3F00;">
+                        class="btn text-white fw-bold rounded-pill shadow-sm py-2 w-75"
+                        style="background-color: #7B3F00;height:60px; display: flex; align-items: center; justify-content: center;">
                             Đăng ký
                         </a>
                     </div>

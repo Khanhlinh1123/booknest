@@ -2,7 +2,17 @@
 
 @section('content')
 
-<h2 class="mb-4 text-center"><b>👤 THÔNG TIN CÁ NHÂN</b></h2>
+<h2 class="mb-4 text-center"><b> THÔNG TIN CÁ NHÂN</b></h2>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <strong>Đã xảy ra lỗi:</strong>
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
 {{-- FORM CẬP NHẬT THÔNG TIN --}}
 <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
@@ -34,6 +44,15 @@
                     <input type="text" name="tenND" id="tenND" class="form-control" value="{{ old('tenND', $user->tenND) }}" required>
                     @error('tenND') <div class="text-danger">{{ $message }}</div> @enderror
                 </div>
+                <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input type="email" name="email" id="email"
+           class="form-control @error('email') is-invalid @enderror"
+           value="{{ old('email', $user->email) }}" required>
+    @error('email')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
 
                 {{-- Email, địa chỉ, ngày sinh, giới tính, ... --}}
 
@@ -56,23 +75,6 @@
     </form>
 </div>
 
-{{-- FORM XOÁ TÀI KHOẢN --}}
-<div class="card p-4 shadow-sm border-danger">
-    <h4 class="text-danger">❌ Xóa tài khoản</h4>
-    <form method="POST" action="{{ route('profile.destroy') }}">
-        @csrf
-        @method('DELETE')
 
-        <p>Bạn có chắc chắn muốn xóa tài khoản? Hành động này không thể hoàn tác.</p>
-
-        <div class="mb-3">
-            <label for="password_delete" class="form-label">Nhập mật khẩu để xác nhận</label>
-            <input type="password" name="password" id="password_delete" class="form-control">
-            @error('password') <div class="text-danger">{{ $message }}</div> @enderror
-        </div>
-
-        <button type="submit" class="btn btn-danger">Xác nhận xoá tài khoản</button>
-    </form>
-</div>
 
 @endsection

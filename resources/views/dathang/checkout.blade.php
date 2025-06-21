@@ -69,10 +69,10 @@
             <input class="form-check-input" type="radio" name="pttt" value="cod" checked>
             <label class="form-check-label">Thanh toán khi nhận hàng (COD)</label>
           </div>
-          <div class="form-check mb-2">
+          <!-- <div class="form-check mb-2">
             <input class="form-check-input" type="radio" name="pttt" value="vnpay">
             <label class="form-check-label">VNPAY</label>
-          </div>
+          </div> -->
           <div class="form-check mb-2">
             <input class="form-check-input" type="radio" name="pttt" value="momo">
             <label class="form-check-label">MoMo</label>
@@ -87,13 +87,14 @@
           <p class="text-danger fs-5 fw-bold">Tổng thanh toán: {{ number_format($tongTien) }}₫</p>
           <input type="hidden" name="tongTien" value="{{ $tongTien }}">
         </div>
-      </div>
-    </div>
-
-    <!-- Nút xác nhận -->
+        <!-- Nút xác nhận -->
     <div class="text-end mt-4">
       <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill">Xác nhận đặt hàng</button>
     </div>
+      </div>
+    </div>
+
+    
   </form>
 </div>
 

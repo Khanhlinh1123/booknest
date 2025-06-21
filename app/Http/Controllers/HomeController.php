@@ -16,7 +16,13 @@ class HomeController extends Controller
 
 public function index() {
     $danhmucs = DanhMuc::orderBy('tenDM')->get();
-    $sachMoi = Sach::with('khuyenMai')->orderBy('created_at', 'desc')->take(5)->get();
+    $sachMoi = Sach::with(['tacGia', 'khuyenMai'])
+    ->withCount('danhGias')
+    ->withAvg('danhGias', 'soSao')
+    ->orderByDesc('created_at')
+    ->take(5)
+    ->get();
+
     $tacgias = TacGia::orderBy('maTG')->take(5)->get();
     $top3BaiViet = BaiViet::latest('created_at')->take(3)->with('nguoiDung')->get();
      $top5BanChay = DB::table('chitietdonhang')
@@ -26,7 +32,8 @@ public function index() {
         ->take(5)
         ->get();
 
-    $top5Sach = Sach::with('khuyenMai')->whereIn('maSach', $top5BanChay->pluck('maSach'))->get();
+    $top5Sach = Sach::with('khuyenMai')->withCount('danhGias')
+    ->withAvg('danhGias', 'soSao')->whereIn('maSach', $top5BanChay->pluck('maSach'))->get();
 
 
     return view('home', compact('danhmucs','sachMoi','tacgias','top3BaiViet', 'top5Sach'));
@@ -47,7 +54,7 @@ public function apiTimKiem(Request $request) {
             'giaGoc' => $sach->giaGoc,
             'giaDaGiam' => $sach->giaDaGiam,
             'hinhanh' => asset('images/sach/' . $sach->hinhanh),
-            'url' => route('sach.show', $sach->maSach),
+            'url' => route('sach.show', $sach->slug),
         ];
     }));
 }

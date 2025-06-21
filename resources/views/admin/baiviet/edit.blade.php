@@ -4,7 +4,18 @@
 <div class="container">
     <h3>Chỉnh sửa: {{ $baiviet->tieuDe }}</h3>
     <form action="{{ route('admin.baiviet.update', $baiviet->maBV) }}" method="POST" enctype="multipart/form-data">
-        @csrf @method('PUT')
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <strong>Đã có lỗi xảy ra:</strong>
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+    
+    @csrf @method('PUT')
 
         <div class="mb-3">
             <label>Tiêu đề</label>

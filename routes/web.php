@@ -12,6 +12,7 @@ use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\VNPayController;
 use App\Http\Controllers\MomoController;
+use App\Http\Controllers\Admin\ReportController;
 
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -52,6 +53,7 @@ Route::prefix('quan-tri')->middleware(['auth', 'is_admin'])->name('admin.')->gro
     Route::resource('baiviet', App\Http\Controllers\Admin\BaiVietController::class);
     Route::resource('tacgia', App\Http\Controllers\Admin\TacGiaController::class);
     Route::resource('nhaxuatban', App\Http\Controllers\Admin\NXBController::class);
+    Route::resource('nguoidung', \App\Http\Controllers\Admin\NguoiDungController::class);
     Route::post('baiviet/upload', [App\Http\Controllers\Admin\BaiVietController::class, 'upload'])->name('baiviet.upload');
     Route::resource('khuyenmai', App\Http\Controllers\Admin\KhuyenMaiController::class);
     Route::get('khuyenmai/{id}/sach', [App\Http\Controllers\Admin\KhuyenMaiController::class, 'products'])->name('khuyenmai.sach');
@@ -61,6 +63,9 @@ Route::get('phieunhap/create', [PhieuNhapController::class, 'create'])
      ->name('phieunhap.create');
 Route::post('phieunhap',       [PhieuNhapController::class, 'store'])
      ->name('phieunhap.store');
+Route::get('/dashboard/ajax-data', [DashboardController::class, 'ajaxData'])->name('dashboard.ajax_data');
+
+     Route::get('report/export', [ReportController::class, 'exportExcel'])->name('report.export_excel');
 
     Route::get('/compose', function () {
         return view('compose');

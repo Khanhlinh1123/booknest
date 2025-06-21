@@ -22,6 +22,49 @@
 
 
 </head>
+<style>
+	.star-rating {
+		position: relative;
+		display: inline-block;
+		font-size: 16px;
+		line-height: 1;
+		}
+
+		.stars {
+		letter-spacing: 2px;
+		font-family: Arial, sans-serif;
+		color: #ccc;
+		}
+
+		.stars.overlay {
+		color: #ffc107;
+		position: absolute;
+		top: 0;
+		left: 0;
+		overflow: hidden;
+		width: var(--percent);
+		white-space: nowrap;
+		pointer-events: none;
+		}
+		.discount-badge {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background-color: #dc3545;
+		color: white;
+		font-size: 14px;
+		font-weight: bold;
+		border-radius: 50%;
+		width: 45px;
+		height: 45px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+		z-index: 10;
+		}
+
+</style>
 
 <body data-bs-spy="scroll" data-bs-target="#header" tabindex="0">
 
@@ -46,7 +89,7 @@
 </section>
 
 
-<section id="featured-books" class="py-5 my-5">
+<section id="featured-books" class="py-3 my-3">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
@@ -64,36 +107,70 @@
 						@foreach($sachMoi as $sach)
 						<div class="col-md-2-4">
 							<div class="product-item">
-								<figure class="product-style">
-								<a href="{{ route('sach.show', $sach->slug) }}">
-									<img src="{{ asset('images/sach/' . $sach->hinhanh) }}" alt="{{ $sach->tenSach }}" class="product-item" style="width: 100%; height: 350px; object-fit: cover;">
-								</a>									
-								<form action="{{ route('giohang.them') }}" method="POST" style="display: inline;">
+								<figure class="product-style position-relative">
+									{{-- Vòng tròn giảm giá --}}
+									@if($sach->giaDaGiam < $sach->giaGoc)
+										@php
+											$phanTram = round(100 * ($sach->giaGoc - $sach->giaDaGiam) / $sach->giaGoc);
+										@endphp
+										<div class="discount-badge">
+											- {{ $phanTram }}%
+										</div>
+									@endif
+									<a href="{{ route('sach.show', $sach->slug) }}">
+										<img src="{{ asset('images/sach/' . $sach->hinhanh) }}"
+											alt="{{ $sach->tenSach }}"
+											style="width: 100%; height: 280px; object-fit: cover; border-radius: 6px;">
+									</a>
+									<form action="{{ route('giohang.them') }}" method="POST" style="display: inline;">
 										@csrf
 										<input type="hidden" name="maSach" value="{{ $sach->maSach }}">
 										<input type="hidden" name="soLuong" value="1">
 										<button type="submit" class="add-to-cart" data-product-tile="add-to-cart">Thêm vào giỏ</button>
 									</form>
-
 								</figure>
-								<figcaption>
-								<h3>
-									<a href="{{ route('sach.show', $sach->slug) }}" class="text-decoration-none text-dark">
+
+								<figcaption class="pt-2">
+									<h4 class="mb-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 48px;">
+										<a href="{{ route('sach.show', $sach->slug) }}" class="text-decoration-none text-dark">
 										{{ $sach->tenSach }}
-									</a>
-								</h3>
-									<span>{{ $sach->tacGia->tenTG ?? 'Không rõ' }}</span>
-									<div class="item-price">
+										</a>
+									</h4>
+
+									<span class="text-muted small">{{ $sach->tacGia->tenTG ?? 'Không rõ' }}</span>
+
+									{{-- Giá --}}
+									<div class="mt-1">
+										<span class="fw-bold text-danger" style="font-size: 18px;">
+										{{ number_format($sach->giaDaGiam) }}₫
+										</span>
+
 										@if($sach->giaDaGiam < $sach->giaGoc)
-										
-									<span class="prev-price">{{ number_format($sach->giaGoc) }}₫</span>
-											&nbsp;
-											<span >{{ number_format($sach->giaDaGiam) }}₫</span>
-										@else
+										<span class="text-muted text-decoration-line-through ms-2">
 											{{ number_format($sach->giaGoc) }}₫
+										</span>
 										@endif
 									</div>
+
+									{{-- Đánh giá + đã bán --}}
+									<div style="font-size: 14px; color: #666;" class="mt-2">
+										@if($sach->soDanhGia > 0)
+									@php
+										$rating = round($sach->trungBinhSao * 10) / 10; // ví dụ 4.2
+										$percentage = min(100, $rating / 5 * 100); // % tô vàng
+									@endphp
+
+									<div class="star-rating" style="--percent: {{ $percentage }}%">
+										<div class="stars base">★★★★★</div>
+										<div class="stars overlay">★★★★★</div>
+									</div>
+									<span class="ms-1 text-muted">({{ $sach->soDanhGia }})</span>
+									@endif
+										<span class="ms-2">| Đã bán {{ number_format($sach->soLuongDaBan) }}</span>
+									</div>
+
 								</figcaption>
+
 							</div>
 						</div>
 						@endforeach
@@ -104,7 +181,7 @@
 			</div>
 		</div>
 
-		<section id="featured-books" class="py-5 my-5">
+		<section id="featured-books" class="py-3 my-3">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
@@ -121,37 +198,71 @@
 
 						@foreach($top5Sach as $sach)
 						<div class="col-md-2-4">
-							<div class="product-item">
-								<figure class="product-style">
-								<a href="{{ route('sach.show', $sach->slug) }}">
-									<img src="{{ asset('images/sach/' . $sach->hinhanh) }}" alt="{{ $sach->tenSach }}" class="product-item" style="width: 100%; height: 350px; object-fit: cover;">
-								</a>									
-								<form action="{{ route('giohang.them') }}" method="POST" style="display: inline;">
+							<div class="product-item" style="min-height: 320px;">
+								<figure class="product-style position-relative">
+									{{-- Vòng tròn giảm giá --}}
+									@if($sach->giaDaGiam < $sach->giaGoc)
+										@php
+											$phanTram = round(100 * ($sach->giaGoc - $sach->giaDaGiam) / $sach->giaGoc);
+										@endphp
+										<div class="discount-badge">
+											- {{ $phanTram }}%
+										</div>
+									@endif
+									<a href="{{ route('sach.show', $sach->slug) }}">
+										<img src="{{ asset('images/sach/' . $sach->hinhanh) }}"
+											alt="{{ $sach->tenSach }}"
+											style="width: 100%; height: 280px; object-fit: cover; border-radius: 6px;">
+									</a>
+									<form action="{{ route('giohang.them') }}" method="POST" style="display: inline;">
 										@csrf
 										<input type="hidden" name="maSach" value="{{ $sach->maSach }}">
 										<input type="hidden" name="soLuong" value="1">
 										<button type="submit" class="add-to-cart" data-product-tile="add-to-cart">Thêm vào giỏ</button>
 									</form>
-
 								</figure>
-								<figcaption>
-								<h3>
-									<a href="{{ route('sach.show', $sach->slug) }}" class="text-decoration-none text-dark">
+								<figcaption class="pt-2">
+									<h4 class="mb-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 48px;">
+										<a href="{{ route('sach.show', $sach->slug) }}" class="text-decoration-none text-dark">
 										{{ $sach->tenSach }}
-									</a>
-								</h3>
-									<span>{{ $sach->tacGia->tenTG ?? 'Không rõ' }}</span>
-									<div class="item-price">
+										</a>
+									</h4>
+								  <span class="text-muted small">{{ $sach->tacGia->tenTG ?? 'Không rõ' }}</span>
+
+									{{-- Giá --}}
+									<div class="mt-1">
+										<span class="fw-bold text-danger" style="font-size: 18px;">
+										{{ number_format($sach->giaDaGiam) }}₫
+										</span>
+
 										@if($sach->giaDaGiam < $sach->giaGoc)
-										
-									<span class="prev-price">{{ number_format($sach->giaGoc) }}₫</span>
-											&nbsp;
-											<span >{{ number_format($sach->giaDaGiam) }}₫</span>
-										@else
+										<span class="text-muted text-decoration-line-through ms-2">
 											{{ number_format($sach->giaGoc) }}₫
+										</span>
+
+										
 										@endif
 									</div>
-								</figcaption>
+
+									{{-- Đánh giá + đã bán --}}
+									<div style="font-size: 14px; color: #666;" class="mt-2">
+									@if($sach->soDanhGia > 0)
+									@php
+										$rating = round($sach->trungBinhSao * 10) / 10; // ví dụ 4.2
+										$percentage = min(100, $rating / 5 * 100); // % tô vàng
+									@endphp
+
+									<div class="star-rating" style="--percent: {{ $percentage }}%">
+										<div class="stars base">★★★★★</div>
+										<div class="stars overlay">★★★★★</div>
+									</div>
+									<span class="ms-1 text-muted">({{ $sach->soDanhGia }})</span>
+									@endif
+									<span class="ms-2">| Đã bán {{ number_format($sach->soLuongDaBan) }}</span>
+									
+								</div>
+							</figcaption>
+
 							</div>
 						</div>
 						@endforeach
@@ -173,7 +284,7 @@
 </section>
 
 
-<section id="author-section" class="py-5 my-5" data-aos="fade-up">
+<section id="author-section" class="py-3 my-3" data-aos="fade-up">
     <div class="container">
         <div class="section-header align-center mb-4">
             <div class="title">
@@ -215,7 +326,7 @@
 	
 	
 
-	<section id="quotation" class="align-center pb-5 mb-5">
+	<section id="quotation" class="align-center pb-3 mb-3">
 		<div class="inner-content">
 			<h2 class="section-title divider">Quote trong ngày</h2>
 			<blockquote data-aos="fade-up">
@@ -318,7 +429,7 @@
 		</div>
 	</section> -->
 
-	<section id="latest-blog" class="py-5 my-5">
+	<section id="latest-blog" class="py-3 my-3">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">

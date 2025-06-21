@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Sach;
 use App\Models\DanhMuc;
-
+use App\Models\DanhGia;
 class SachController extends Controller
 {
     /**
@@ -45,7 +45,10 @@ class SachController extends Controller
         ->take(5)
         ->get();
         $sach = Sach::where('slug', $slug)->with(['tacGia', 'nhaXuatBan', 'danhGias.nguoiDung'])->firstOrFail();
-
+        $danhgias = DanhGia::where('maSach', $sach->maSach)
+        ->with('nguoiDung')
+        ->orderByDesc('created_at')
+        ->get();
         // Lấy số lượng đánh giá và điểm trung bình
         $soDanhGia = $sach->danhGias()->count();
         $trungBinhSao = round($sach->danhGias()->avg('soSao'), 1); // làm tròn 1 chữ số thập phân
@@ -53,7 +56,7 @@ class SachController extends Controller
         // Các sách cùng danh mục
         $sachCDM = Sach::where('maDM', $sach->maDM)->where('maSach', '!=', $sach->maSach)->limit(5)->get();
 
-        return view('sach.show', compact('sach', 'soDanhGia', 'trungBinhSao', 'sachCDM'));
+        return view('sach.show', compact('sach', 'soDanhGia', 'trungBinhSao', 'sachCDM', 'danhgias'));
 
     // Lấy 5 sách cùng danh mục (trừ chính nó)
     
@@ -124,11 +127,21 @@ class SachController extends Controller
         $keyword = $request->keyword;
 
         $sach = Sach::where('tenSach', 'like', '%' . $keyword . '%')
-                    ->select('maSach', 'tenSach')
+                    ->select('maSach', 'tenSach','slug')
                     ->take(5)
                     ->get();
 
-        return response()->json($sach);
+        $sach = $sach->map(function ($s) {
+        return [
+            'tenSach' => $s->tenSach,
+            'giaGoc' => $s->giaGoc,
+            'giaDaGiam' => $s->giaDaGiam,
+            'hinhanh' => asset('images/sach/' . $s->hinhanh),
+            'url' => route('sach.chitiet', ['slug' => $s->slug]),
+        ];
+    });
+
+    return response()->json($sach);
     }
 
     public function timKiem(Request $request)

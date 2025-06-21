@@ -2503,7 +2503,7 @@ footer#footer {
 .product-style img.product-item {
   padding: 0;
   border: none;
-  height: 250px;
+  height: 200px;
   object-fit: cover;
 }
 

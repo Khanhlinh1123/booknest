@@ -6,7 +6,7 @@
 
 					<div class="footer-item">
 						<div class="company-brand">
-							<img src="images/main-logo.png" alt="logo" class="footer-logo" style="height:200px">
+							<img src="{{ asset('images/main-logo.png') }}" alt="logo" class="footer-logo" style="height:200px">
 							<p>"Tổ ấm của người yêu sách"</p>
 						</div>
 					</div>

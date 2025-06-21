@@ -21,7 +21,7 @@ class DonHangController extends Controller
             $sachs = Sach::whereIn('maSach', $chonSach)->get();
 
             foreach ($sachs as $sach) {
-                $soLuong = $cart[$sach->maSach] ?? 1;
+                $soLuong = $cart[$sach->maSach] ?? $request->input('soLuong', 1);
                 $gioHang[] = [
                     'sach' => $sach,
                     'soLuong' => $soLuong

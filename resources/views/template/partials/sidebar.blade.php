@@ -56,9 +56,9 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="sidebar-link" href="/charts">
+            <a class="sidebar-link" href="{{ route('admin.nguoidung.index') }}">
                 <span class="icon-holder"><i class="fas fa-user-shield c-indigo-500"></i></span>
-                <span class="title">Quản lý tài khoản</span>
+                <span class="title">Quản lý người dùng</span>
             </a>
         </li>
         <li class="nav-item">

@@ -49,7 +49,7 @@ class Sach extends Model
     }
     public function soLuongDaBan()
     {
-        return $this->donHangs()->sum('chitietdonhangchitietdonhang.soLuong');
+        return $this->donHangs()->sum('chitietdonhang.soLuong');
     }
     public function getSoLuongDaBanAttribute()
     {
@@ -63,5 +63,16 @@ class Sach extends Model
     public function nhaXuatBan() {
         return $this->belongsTo(Nhaxuatban::class, 'maNXB');
     }
-    
+        // Số lượt đánh giá
+    public function getSoDanhGiaAttribute()
+    {
+        return $this->danhGias()->count();
+    }
+
+    // Trung bình số sao
+    public function getTrungBinhSaoAttribute()
+    {
+        return round($this->danhGias()->avg('soSao'), 1) ?? 0;
+    }
+
 }

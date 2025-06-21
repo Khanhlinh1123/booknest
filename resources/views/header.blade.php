@@ -24,137 +24,157 @@
 </head>
 
 <style>
-	
 	.menu-item.has-sub {
     position: relative;
-}
+    }
 
-.menu-item.has-sub > .dropdown-danhmuc-grid {
-    display: none;
-    position: absolute;
-    top: calc(100% + 5px); /* Đẩy menu xuống 5px dưới mục "Danh mục" */
-    left: 0;
-    background-color: #f5f5f5;
-    z-index: 9999;
-    min-width: 550px;
-    grid-template-columns: repeat(2, minmax(180px, 1fr));
-    column-gap: 40px;
-    row-gap: 10px;
-    padding: 12px 20px;
-    white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    transition: opacity 0.2s ease;
-}
+    .menu-item.has-sub > .dropdown-danhmuc-grid {
+        display: none;
+        position: absolute;
+        top: calc(100% + 5px); /* Đẩy menu xuống 5px dưới mục "Danh mục" */
+        left: 0;
+        background-color: #f5f5f5;
+        z-index: 9999;
+        min-width: 550px;
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+        column-gap: 40px;
+        row-gap: 10px;
+        padding: 12px 20px;
+        white-space: nowrap;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        transition: opacity 0.2s ease;
+    }
 
-.menu-item.has-sub:hover > .dropdown-danhmuc-grid {
-    display: grid;
-}
-
-
-/* Bố cục danh mục con */
-ul.dropdown-danhmuc-grid li {
-    list-style: none;
-    margin: 0;
-}
-
-ul.dropdown-danhmuc-grid li a {
-    display: block;
-    padding: 6px 8px;
-    font-size: 14px;
-    color: #333;
-    text-decoration: none;
-    border-radius: 4px;
-}
-
-ul.dropdown-danhmuc-grid li a:hover {
-    background-color: rgb(209, 126, 48); /* nâu nhạt */
-    color: #fff;
-}
-
-/* Form tìm kiếm */
-.custom-search-form {
-    margin-bottom: 0 !important;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.custom-input {
-    height: 46px;
-    border-radius: 999px;
-    font-size: 15px;
-}
-
-.custom-button {
-    height: 36px;
-    width: 40px;
-    border-radius: 999px;
-    background-color: rgb(209, 126, 48);
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.danhmuc-hover-wrap {
-    position: relative;
-    display: inline-block;
-}
-
-/* Hiển thị menu khi hover */
-.danhmuc-hover-wrap {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-danhmuc-grid {
-    display: none;
-    position: absolute;
-    top: calc(100% + 5px);
-    left: 0;
-    background-color: #f5f5f5;
-    z-index: 9999;
-    min-width: 550px;
-    padding: 20px 20px;
-    white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    transition: opacity 0.2s ease;
-
-    /* Giữ layout chia cột dù đang ẩn */
-    grid-template-columns: repeat(2, minmax(180px, 1fr));
-    column-gap: 40px;
-    row-gap: 10px;
-    display: none; /* quan trọng: không set grid ở đây */
-}
-
-/* Khi hover vào wrap thì menu hiển thị + dùng layout grid */
-.danhmuc-hover-wrap:hover .dropdown-danhmuc-grid {
-    display: grid;
-}
+    .menu-item.has-sub:hover > .dropdown-danhmuc-grid {
+        display: grid;
+    }
 
 
+    /* Bố cục danh mục con */
+    ul.dropdown-danhmuc-grid li {
+        list-style: none;
+        margin: 0;
+    }
+
+    ul.dropdown-danhmuc-grid li a {
+        display: block;
+        padding: 6px 8px;
+        font-size: 14px;
+        color: #333;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    ul.dropdown-danhmuc-grid li a:hover {
+        background-color: rgb(209, 126, 48); /* nâu nhạt */
+        color: #fff;
+    }
+
+    /* Form tìm kiếm */
+    .custom-search-form {
+        margin-bottom: 0 !important;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .custom-input {
+        height: 46px;
+        border-radius: 999px;
+        font-size: 15px;
+    }
+
+    .custom-button {
+        height: 36px;
+        width: 40px;
+        border-radius: 999px;
+        background-color: rgb(209, 126, 48);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .danhmuc-hover-wrap {
+        position: relative;
+        display: inline-block;
+    }
+
+    /* Hiển thị menu khi hover */
+    .danhmuc-hover-wrap {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-danhmuc-grid {
+        display: none;
+        position: absolute;
+        top: calc(100% + 5px);
+        left: 0;
+        background-color: #f5f5f5;
+        z-index: 9999;
+        min-width: 550px;
+        padding: 20px 20px;
+        white-space: nowrap;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        transition: opacity 0.2s ease;
+
+        /* Giữ layout chia cột dù đang ẩn */
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+        column-gap: 40px;
+        row-gap: 10px;
+        display: none; /* quan trọng: không set grid ở đây */
+    }
+
+    /* Khi hover vào wrap thì menu hiển thị + dùng layout grid */
+    .danhmuc-hover-wrap:hover .dropdown-danhmuc-grid {
+        display: grid;
+    }
+
+    /* Bo góc, đổ bóng, padding mượt */
+    .dropdown-menu {
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        padding: 8px 0;
+        overflow: hidden;
+    }
+
+    /* Từng mục trong dropdown */
+    .dropdown-menu .dropdown-item {
+        padding: 10px 16px;
+        font-weight: 500;
+        color: #333;
+        transition: background-color 0.2s;
+        border-radius: 0; /* không bo riêng từng item */
+    }
+
+    /* Hover hiệu ứng mượt */
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #000;
+    }
 </style>
 
 
-<!-- Tìm kiếm trên đầu -->
-<div class="bg-light border-bottom py-3">
-    <div class="container">
-        <form method="GET" action="{{ route('timkiem') }}" class="d-flex justify-content-center position-relative custom-search-form">
-            <input type="text" name="tuKhoa" id="searchInput"
-                class="form-control rounded-pill custom-input ps-4 pe-5"
-                placeholder="Tìm kiếm sách..."
-                autocomplete="off">
+        <!-- Tìm kiếm trên đầu -->
+        <div class="bg-light border-bottom py-3">
+            <div class="container">
+                <form method="GET" action="{{ route('timkiem') }}" class="d-flex justify-content-center position-relative custom-search-form">
+                    <input type="text" name="tuKhoa" id="searchInput"
+                        class="form-control rounded-pill custom-input ps-4 pe-5"
+                        placeholder="Tìm kiếm sách..."
+                        autocomplete="off">
 
-            <button type="submit" class="custom-button position-absolute end-0 me-2"style="top: -10px;">
-                <i class="fa fa-search"></i>
-            </button>
+                    <button type="submit" class="custom-button position-absolute end-0 me-2"style="top: -10px;">
+                        <i class="fa fa-search"></i>
+                    </button>
 
-            <!-- Box gợi ý -->
-            <div id="suggestionsBox"
-                class="bg-white border rounded shadow-sm position-absolute w-100 mt-2"
-                style="display:none; max-height: 300px; overflow-y: auto; z-index:999; top: 100%;">
+                    <!-- Box gợi ý -->
+                    <div id="suggestionsBox"
+                        class="bg-white border rounded shadow-sm position-absolute w-100 mt-2"
+                        style="display:none; max-height: 300px; overflow-y: auto; z-index:999; top: 100%;">
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</div>
+        </div>
 
 
 
@@ -177,17 +197,16 @@ ul.dropdown-danhmuc-grid li a:hover {
 								<ul class="menu-list">
 									<li class="menu-item active"><a href="{{ route('home') }}">Trang chủ</a></li>
 									<li class="menu-item has-sub">
-  <div class="danhmuc-hover-wrap">
-    <a href="#" class="nav-link">Danh mục <i class="fa-solid fa-angle-down" style="font-size: 0.6rem; margin-left: 6px;"></i>
-	</a>
-    <ul class="dropdown-danhmuc-grid">
-      @foreach ($danhmucs as $dm)
-        <li><a href="{{ route('danhmuc.show', $dm->maDM) }}">{{ $dm->tenDM }}</a></li>
-      @endforeach
-    </ul>
-  </div>
-</li>
-
+                                    <div class="danhmuc-hover-wrap">
+                                        <a href="#" class="nav-link">Danh mục <i class="fa-solid fa-angle-down" style="font-size: 0.6rem; margin-left: 6px;"></i>
+                                        </a>
+                                        <ul class="dropdown-danhmuc-grid">
+                                        @foreach ($danhmucs as $dm)
+                                            <li><a href="{{ route('danhmuc.show', $dm->maDM) }}">{{ $dm->tenDM }}</a></li>
+                                        @endforeach
+                                        </ul>
+                                    </div>
+                                    </li>
 									<li class="menu-item"><a href="{{ route('tacgia.index') }}" class="nav-link">Tác giả</a></li>
 									<li class="menu-item"><a href="{{ route('baiviet.index') }}" class="nav-link">Bài viết</a></li>
 									<li class="menu-item"><a href="#best-selling" class="nav-link">Về BookNest</a></li>

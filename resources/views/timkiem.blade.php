@@ -20,7 +20,9 @@
             <div class="col-5ths">
                 <div class="product-item">
                     <figure class="product-style">
+                        <a href="{{ route('sach.show', $sach->slug) }}">
                         <img src="{{ asset('images/sach/' . $sach->hinhanh) }}" alt="{{ $sach->tenSach }}" class="product-item" style="width: 100%; height: 350px; object-fit: cover;">
+                        </a>
                         <form action="{{ route('giohang.them') }}" method="POST" style="display: inline;">
                             @csrf
                             <input type="hidden" name="maSach" value="{{ $sach->maSach }}">
@@ -29,7 +31,9 @@
                         </form>
                     </figure>
                     <figcaption>
+                        <a href="{{ route('sach.show', $sach->slug) }}">
                         <h3>{{ $sach->tenSach }}</h3>
+                        </a>
                         <span>{{ $sach->tacGia->tenTG ?? 'Không rõ' }}</span>
                         <div class="item-price">
                             @if($sach->giaDaGiam < $sach->giaGoc)

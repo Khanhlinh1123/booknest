@@ -4,6 +4,17 @@
 <div class="container">
     <h3>Thêm bài viết</h3>
     <form action="{{ route('admin.baiviet.store') }}" method="POST" enctype="multipart/form-data">
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <strong>Đã xảy ra lỗi:</strong>
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
         @csrf
 
         <div class="mb-3">

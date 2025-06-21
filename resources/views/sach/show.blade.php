@@ -32,6 +32,46 @@
     padding: 6px;
     height: 38px;
 }
+	.star-rating {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.stars {
+  letter-spacing: 2px;
+  font-family: Arial, sans-serif;
+  color: #ccc;
+}
+
+.stars.overlay {
+  color: #ffc107;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  width: var(--percent);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #dc3545;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 10;
+}
 
 </style>
 
@@ -84,27 +124,57 @@
                     <span class="ms-2 text-muted">({{ $soDanhGia }} đánh giá)</span>
                     <span class="text-muted ms-3">Đã bán {{ $sach->soLuongDaBan ?? 0 }}</span>
                 </div>
-                <form method="POST">
-                    @csrf
-                    <input type="hidden" name="maSach" value="{{ $sach->maSach }}">
-                    <div class="d-flex align-items-center mb-4">
-                        <label for="soLuongInput" class="form-label mb-0 me-3" style="min-width: 80px;">Số lượng:</label>
-                        <div class="d-flex align-items-center gap-1">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="thayDoiSoLuong(-1)">−</button>
-                            <input type="number" name="soLuong" id="soLuongInput" class="form-control text-center" value="1" min="1" max="{{ $sach->soLuong }}" style="width: 60px;">
-                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="thayDoiSoLuong(1)">+</button>
-                        </div>
+                {{-- Hiển thị giá tiền --}}
+<div class="mb-3">
+    @if($sach->giaDaGiam < $sach->giaGoc)
+        <div>
+            <span class="text-muted text-decoration-line-through me-2" style="font-size: 18px;">
+                {{ number_format($sach->giaGoc) }}₫
+            </span>
+            <span class="text-danger fw-bold" style="font-size: 22px;">
+                {{ number_format($sach->giaDaGiam) }}₫
+            </span>
+        </div>
+    @else
+        <div>
+            <span class="fw-bold text-dark" style="font-size: 22px;">
+                {{ number_format($sach->giaGoc) }}₫
+            </span>
+        </div>
+    @endif
+</div>
+
+
+                {{-- Số lượng dùng chung --}}
+                <div class="d-flex align-items-center">
+                    <label for="soLuongInput" class="form-label mb-0 me-2" style="min-width: 80px;">Số lượng:</label>
+                    <div class="d-flex align-items-center gap-1">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="thayDoiSoLuong(-1)">−</button>
+                        <input type="number" id="soLuongInput" class="form-control text-center" value="1" min="1" max="{{ $sach->soLuong }}" style="width: 60px;">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" onclick="thayDoiSoLuong(1)">+</button>
                     </div>
-
-
-
-                    <div class="d-flex gap-2">
-                        <button type="submit" formaction="{{ route('giohang.them') }}" class="btn btn-outline-brown rounded-pill px-4">
+                </div>
+                <br>
+                <div class="d-flex flex-wrap gap-2 align-items-end mt-3">
+                    {{-- Nút Thêm vào giỏ --}}
+                    <form method="POST" action="{{ route('giohang.them') }}" class="d-inline">
+                        @csrf
+                        <input type="hidden" name="maSach" value="{{ $sach->maSach }}">
+                        <input type="hidden" name="soLuong" id="soLuongHidden" value="1">
+                        <button type="submit" class="btn btn-outline-brown rounded-pill px-4">
                             <i class="fa fa-shopping-cart me-2"></i> Thêm vào giỏ
                         </button>
-                        <button class="btn btn-danger rounded-pill px-4">Mua ngay</button>
-                    </div>
-                </form>
+                    </form>
+
+                    {{-- Nút Mua ngay --}}
+                    <form method="GET" action="{{ route('checkout') }}" onsubmit="return ganSoLuongMuaNgay()" class="d-inline">
+                        <input type="hidden" name="chonSach[]" value="{{ $sach->maSach }}">
+                        <input type="hidden" name="soLuong" id="soLuongMuaNgayInput" value="1">
+                        <button type="submit" class="btn btn-danger rounded-pill px-4">Mua ngay</button>
+                    </form>
+
+                </div>
+
             </div>
 
             <!-- Thông tin cơ bản -->
@@ -197,7 +267,7 @@
 
 <div class="container my-5">
     <div class="rounded shadow-sm p-4 bg-white d-flex flex-column flex-md-row justify-content-between align-items-center review-summary-box">
-        <!-- Cột trái: Điểm trung bình -->
+        <!-- Điểm trung bình -->
         <div class="text-center mb-4 mb-md-0" style="min-width: 200px;">
             <div class="fs-1 fw-bold text-dark">{{ number_format($trungBinhSao, 1) }}<span class="fs-4">/5</span></div>
             <div class="text-warning fs-5">
@@ -206,9 +276,8 @@
                 @endfor
             </div>
             <div class="text-muted mt-1">({{ $soDanhGia }} đánh giá)</div>
-        </div>
-
-        <!-- Cột phải: phân tích sao -->
+        </div>  
+        <!-- Sao -->
         <div class="flex-grow-1 px-md-5 w-100">
             @for ($i = 5; $i >= 1; $i--)
                 @php
@@ -233,6 +302,75 @@
         </div>
     </div>
 </div>
+<div class="container mt-4" id="user-reviews">
+    <h4 class="mb-4 ">ĐÁNH GIÁ TỪ NGƯỜI DÙNG</h4>
+
+    @php
+        $visibleCount = 3;
+    @endphp
+
+    <div class="row">
+        {{-- Đánh giá hiển thị --}}
+        @foreach($danhgias->take($visibleCount) as $dg)
+            <div class="col-12 mb-3">
+                <div class="p-3 rounded border bg-white shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <strong class="text-dark">{{ $dg->nguoiDung->tenND ?? 'Ẩn danh' }}</strong>
+                        <small class="text-muted">{{ \Carbon\Carbon::parse($dg->created_at)->format('d/m/Y') }}</small>
+                    </div>
+                    <div class="text-warning mb-2">
+                        @for($i = 1; $i <= 5; $i++)
+                            @if($i <= $dg->soSao)
+                                <i class="fa fa-star"></i>
+                            @else
+                                <i class="fa fa-star-o"></i>
+                            @endif
+                        @endfor
+                    </div>
+                    <div class="text-muted lh-base" style="font-size: 15px;">
+                        {{ $dg->nhanXet }}
+                    </div>
+                </div>
+            </div>
+        @endforeach
+
+        {{-- Phần ẩn --}}
+        <div id="hidden-reviews" style="display: none;">
+            @foreach($danhgias->skip($visibleCount) as $dg)
+                <div class="col-12 mb-3">
+                    <div class="p-3 rounded border bg-white shadow-sm">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <strong class="text-dark">{{ $dg->nguoiDung->tenND ?? 'Ẩn danh' }}</strong>
+                            <small class="text-muted">{{ \Carbon\Carbon::parse($dg->created_at)->format('d/m/Y') }}</small>
+                        </div>
+                        <div class="text-warning mb-2">
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= $dg->soSao)
+                                    <i class="fa fa-star"></i>
+                                @else
+                                    <i class="fa fa-star-o"></i>
+                                @endif
+                            @endfor
+                        </div>
+                        <div class="text-muted lh-base" style="font-size: 15px;">
+                            {{ $dg->nhanXet }}
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+    {{-- Nút xem thêm --}}
+    @if($danhgias->count() > $visibleCount)
+        <div class="text-center mt-3">
+            <button class="btn btn-outline-secondary" onclick="document.getElementById('hidden-reviews').style.display='block'; this.remove();">
+                Xem thêm đánh giá
+            </button>
+        </div>
+    @endif
+</div>
+
 
 
 <!-- Modal đánh giá -->
@@ -280,6 +418,7 @@
           <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Hủy</button>
           <button type="submit" class="btn btn-danger px-4">Gửi nhận xét</button>
         </div>
+
       </form>
     </div>
   </div>
@@ -287,7 +426,7 @@
 
 
 
-<section id="featured-books" class="py-5 my-5">
+<section id="featured-books" class="py-3 my-3">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
@@ -305,30 +444,73 @@
 						@foreach($sachCDM as $sach)
 						<div class="col-md-2-4">
 							<div class="product-item">
-								<figure class="product-style">
-									<img src="{{ asset('images/sach/' . $sach->hinhanh) }}" alt="{{ $sach->tenSach }}" class="product-item" style="width: 100%; height: 350px; object-fit: cover;">
-									<form action="{{ route('giohang.them') }}" method="POST" style="display: inline;">
+								<figure class="product-style position-relative mb-2">
+									{{-- Vòng tròn giảm giá --}}
+									@if($sach->giaDaGiam < $sach->giaGoc)
+										@php
+											$phanTram = round(100 * ($sach->giaGoc - $sach->giaDaGiam) / $sach->giaGoc);
+										@endphp
+										<div class="discount-badge">
+											- {{ $phanTram }}%
+										</div>
+									@endif
+                            <a href="{{ route('sach.show', $sach->slug) }}">
+                                <img src="{{ asset('images/sach/' . $sach->hinhanh) }}" alt="{{ $sach->tenSach }}"
+                                    class="img-fluid" style="height: 250px; object-fit: cover;">
+                            </a>
+                            <form action="{{ route('giohang.them') }}" method="POST" style="display: inline;">
 										@csrf
 										<input type="hidden" name="maSach" value="{{ $sach->maSach }}">
 										<input type="hidden" name="soLuong" value="1">
 										<button type="submit" class="add-to-cart" data-product-tile="add-to-cart">Thêm vào giỏ</button>
-									</form>
+									</form>                        
+                        </figure>
+                        <figcaption>
+                            <h6>
+                                <a href="{{ route('sach.show', $sach->slug) }}" class="text-decoration-none text-dark" style="font-family: 'Times New Roman', Times, serif;">
+                                    {{ $sach->tenSach }}
+                                </a>
+                            </h6>
 
-								</figure>
-								<figcaption>
-									<h3>{{ $sach->tenSach }}</h3>
-									<span>{{ $sach->tacGia->tenTG ?? 'Không rõ' }}</span>
-									<div class="item-price">
-										@if($sach->giaDaGiam < $sach->giaGoc)
-										
-									<span class="prev-price">{{ number_format($sach->giaGoc) }}₫</span>
-											&nbsp;
-											<span >{{ number_format($sach->giaDaGiam) }}₫</span>
-										@else
-											{{ number_format($sach->giaGoc) }}₫
-										@endif
-									</div>
-								</figcaption>
+                                    <span class="text-muted small">{{ $sach->tacGia->tenTG ?? 'Không rõ' }}</span>
+
+                                    {{-- Giá --}}
+                                    <div class="mt-1">
+                                        <span class="fw-bold text-danger" style="font-size: 17px;">
+                                            {{ number_format($sach->giaDaGiam) }}₫
+                                        </span>
+                                        @if($sach->giaDaGiam < $sach->giaGoc)
+                                            <span class="text-muted text-decoration-line-through ms-2">
+                                                {{ number_format($sach->giaGoc) }}₫
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    {{-- Đánh giá + đã bán --}}
+                                    @php
+                                        $soDG = $sach->danhGias()->count();
+                                        $tbSao = round($sach->danhGias()->avg('soSao'), 1);
+                                        $full = floor($tbSao);
+                                        $empty = 5 - $full;
+                                    @endphp
+
+                                        <div class="mt-1" style="font-size: 14px; color: #555;">
+                                            @if($soDG > 0)
+                                                <span>
+                                                    @for($i = 0; $i < $full; $i++)
+                                                        <span style="color: #ffc107;">★</span>
+                                                    @endfor
+                                                    @for($i = 0; $i < $empty; $i++)
+                                                        <span style="color: #ccc;">★</span>
+                                                    @endfor
+                                                </span>
+                                                <span class="ms-1 text-muted">({{ $soDG }})</span>
+                                            @endif
+
+                                            <span class="ms-2 text-muted">| Đã bán {{ number_format($sach->soLuongDaBan) }}</span>
+                                        </div>
+                                </figcaption>
+
 							</div>
 						</div>
 						@endforeach
@@ -377,6 +559,14 @@
     }
     
 </script>
+<script>
+    function ganSoLuongMuaNgay() {
+        const slDaChon = document.getElementById('soLuongInput').value;
+        document.getElementById('soLuongMuaNgayInput').value = slDaChon;
+        return true; // Cho phép submit tiếp tục
+    }
+</script>
+
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const textarea = document.getElementById('nhanXet');
@@ -441,3 +631,4 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 </style>
+@include('footer');

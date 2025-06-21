@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
 
@@ -29,45 +30,60 @@ class ProfileController extends Controller
      */
 
      public function update(ProfileUpdateRequest $request): RedirectResponse
-     {
-         $user = $request->user();
-     
-         // Cập nhật thông tin cơ bản từ validated() — KHÔNG có avatar ở đây!
-         $user->fill($request->validated());
-     
-         // Nếu đổi email thì reset xác minh
-         if ($user->isDirty('email')) {
-             $user->email_verified_at = null;
-         }
-     
-         // Xử lý avatar nếu có file upload
-         if ($request->hasFile('avatar')) {
-             $file = $request->file('avatar');
-             $filename = time() . '_' . $file->getClientOriginalName();
-             $destinationPath = public_path('images/nguoidung');
-     
-             // Tạo thư mục nếu chưa có
-             if (!file_exists($destinationPath)) {
-                 mkdir($destinationPath, 0755, true);
-             }
-     
-             // Lưu file
-             $file->move($destinationPath, $filename);
-     
-             // Xoá ảnh cũ nếu tồn tại
-             if ($user->avatar && file_exists($destinationPath . '/' . $user->avatar)) {
-                 unlink($destinationPath . '/' . $user->avatar);
-             }
-     
-             // ✅ Gán tên ảnh vào đối tượng User SAU khi fill()
-             $user->avatar = $filename;
-         }
-     
-         // Lưu người dùng
-         $user->save();
-     
-         return Redirect::route('profile.edit')->with('status', 'profile-updated');
-     }
+{
+    Log::info('🔥 Hàm update() đang được gọi');
+
+    $user = $request->user();
+
+    try {
+        $user->fill($request->validated());
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+
+            Log::info('Đang xử lý avatar mới:', [
+                'original_name' => $file->getClientOriginalName(),
+                'size' => $file->getSize(),
+                'mime' => $file->getMimeType(),
+            ]);
+
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $destinationPath = public_path('images/nguoidung');
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+                Log::info("Đã tạo thư mục $destinationPath");
+            }
+
+            $moved = $file->move($destinationPath, $filename);
+
+            if ($moved) {
+                Log::info("Ảnh đã được lưu: $filename");
+            } else {
+                Log::error("Không thể lưu ảnh avatar.");
+            }
+
+            if ($user->avatar && file_exists($destinationPath . '/' . $user->avatar)) {
+                unlink($destinationPath . '/' . $user->avatar);
+                Log::info("Đã xoá ảnh cũ: " . $user->avatar);
+            }
+
+            $user->avatar = $filename;
+        }
+
+        $user->save();
+        Log::info("Cập nhật thông tin người dùng thành công: ID {$user->id}");
+
+    } catch (\Exception $e) {
+        Log::error("Lỗi khi cập nhật profile: " . $e->getMessage());
+    }
+
+    return Redirect::route('profile.edit')->with('status', 'profile-updated');
+}
      
 
 

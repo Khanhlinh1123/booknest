@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\DonHang;
 use App\Models\Sach;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -39,42 +40,96 @@ class DashboardController extends Controller
         ->get();
         
 
-    $labels = $revenueByMonth->pluck('month');
-    $values = $revenueByMonth->pluck('total');
-    // Lấy top 5 sách bán chạy
-    $topBooks = DB::table('chitietdonhang')
-        ->select('maSach', DB::raw('SUM(soLuong) as total'))
-        ->groupBy('maSach')
+        $labels = $revenueByMonth->pluck('month');
+        $values = $revenueByMonth->pluck('total');
+        // Lấy top 5 sách bán chạy
+        $topBooks = Sach::select('tenSach', DB::raw('SUM(chitietdonhang.soLuong) as total'))
+        ->join('chitietdonhang', 'sach.maSach', '=', 'chitietdonhang.maSach')
+        ->join('donhang', 'donhang.maDH', '=', 'chitietdonhang.maDH')
+        ->where('donhang.tinhTrang', 'Đã hoàn thành')
+        ->groupBy('sach.maSach', 'tenSach')
         ->orderByDesc('total')
         ->limit(5)
         ->get();
 
-    // Tạo mảng nhãn và giá trị
-    $bookLabels = [];
-    $bookCounts = [];
+    $bookLabels = $topBooks->pluck('tenSach');
+    $bookCounts = $topBooks->pluck('total');
 
-    foreach ($topBooks as $book) {
-        $tenSach = DB::table('sach')->where('maSach', $book->maSach)->value('tenSach');
-        $bookLabels[] = $tenSach ?: "Sách ID " . $book->maSach;
-        $bookCounts[] = $book->total;
-    }
-    $soLuongSachTheoThang = DB::table('donhang')
-    ->join('chitietdonhang', 'donhang.maDH', '=', 'chitietdonhang.maDH')
-    ->select(DB::raw("DATE_FORMAT(donhang.created_at, '%Y-%m') as thang"), DB::raw("SUM(chitietdonhang.soLuong) as soLuong"))
-    ->groupBy('thang')
-    ->orderBy('thang')
-    ->pluck('soLuong')
-    ->toArray();
 
+    
+        $soLuongSachTheoThang = Donhang::where('tinhTrang', 'Đã hoàn thành')
+        ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as thang, SUM(sl.soLuong) as soLuong")
+        ->leftJoin('chitietdonhang as sl', 'donhang.maDH', '=', 'sl.maDH')
+        ->groupBy('thang')
+        ->orderBy('thang')
+        ->pluck('soLuong', 'thang')
+        ->toArray();
+
+        $soLuongTheoThang = [];
+        foreach ($labels as $thang) {
+            $soLuongTheoThang[] = $soLuongSachTheoThang[$thang] ?? 0;
+        }
 
         return view('admin.dashboard', compact(
             'tongTruyCapThang',
             'tongDonHangHomNay',
             'doanhThuThang',
             'tongSoSach',
-            'donHangGanNhat','labels', 'values',
-            'bookLabels', 'bookCounts',
-            'soLuongSachTheoThang'
+            'donHangGanNhat',
+            'labels',
+            'values',
+            'bookLabels',
+            'bookCounts',
+            'soLuongTheoThang' 
         ));
+
     }
+    public function ajaxData(Request $request)
+{
+    $from = $request->input('from') ?? now()->startOfMonth()->toDateString();
+    $to = $request->input('to') ?? now()->toDateString();
+
+    // 1. Tạo danh sách tất cả các tháng trong khoảng
+    $labels = [];
+    $start = Carbon::parse($from)->startOfMonth();
+    $end = Carbon::parse($to)->startOfMonth();
+
+    while ($start <= $end) {
+        $labels[] = $start->format('m/Y');
+        $start->addMonth();
+    }
+
+    // 2. Truy vấn từ DB
+    $data = Donhang::where('tinhTrang', 'Đã hoàn thành')
+        ->whereBetween('created_at', [$from, $to])
+        ->selectRaw('DATE_FORMAT(created_at, "%m/%Y") as thang, SUM(tongTien) as tong, SUM(sl.soLuong) as soLuong')
+        ->leftJoin('chitietdonhang as sl', 'donhang.maDH', '=', 'sl.maDH')
+        ->groupBy('thang')
+        ->pluck('tong', 'thang')
+        ->toArray();
+
+    $soLuong = Donhang::where('tinhTrang', 'Đã hoàn thành')
+        ->whereBetween('created_at', [$from, $to])
+        ->selectRaw('DATE_FORMAT(created_at, "%m/%Y") as thang, SUM(sl.soLuong) as sl')
+        ->leftJoin('chitietdonhang as sl', 'donhang.maDH', '=', 'sl.maDH')
+        ->groupBy('thang')
+        ->pluck('sl', 'thang')
+        ->toArray();
+
+    // 3. Gắn giá trị hoặc 0 nếu không có
+    $values = [];
+    $soLuongArr = [];
+    foreach ($labels as $thang) {
+        $values[] = $data[$thang] ?? 0;
+        $soLuongArr[] = $soLuong[$thang] ?? 0;
+    }
+
+    return response()->json([
+        'labels' => $labels,
+        'values' => $values,
+        'soLuong' => $soLuongArr,
+    ]);
+}
+
+
 }

@@ -59,11 +59,22 @@
 </div>
 <div class="row mt-4">
   <div class="col-md-6">
-    <div class="bgc-white p-3 bd">
-      <h5>  Biểu đồ doanh thu theo tháng</h5>
-      <canvas id="revenueChart" height="200"></canvas>
+  <div class="bgc-white p-3 bd">
+    <div class="d-flex flex-wrap justify-content-between align-items-center">
+      <h5 class="mb-2 mb-md-0">Doanh thu theo tháng</h5>
+      <form action="{{ route('admin.report.export_excel') }}" method="GET" class="form-inline d-flex flex-wrap gap-2">
+        <input type="date" name="from" class="form-control form-control-sm mb-2 mb-md-0" value="{{ request('from', now()->startOfMonth()->toDateString()) }}">
+        <input type="date" name="to" class="form-control form-control-sm mb-2 mb-md-0" value="{{ request('to', now()->toDateString()) }}">
+        <button type="submit" class="btn btn-success btn-sm mb-2 mb-md-0">
+          <i class="fa fa-file-excel-o"></i> Xuất Excel
+        </button>
+      </form>
     </div>
+    <canvas id="revenueChart" height="200" class="mt-3"></canvas>
   </div>
+</div>
+
+
   <div class="col-md-6">
     <div class="bgc-white p-3 bd">
       <h5>  Top 5 sách bán chạy</h5>
@@ -108,6 +119,97 @@
 
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  let revenueChart;
+
+  window.onload = function () {
+    const labels = @json($labels);
+    const values = @json($values);
+    const soLuong = @json($soLuongTheoThang);
+
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    revenueChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Doanh thu (VND)',
+            data: values,
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+            yAxisID: 'y1',
+          },
+          {
+            type: 'line',
+            label: 'Số lượng sách bán',
+            data: soLuong,
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            fill: false,
+            tension: 0.3,
+            yAxisID: 'y2',
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Doanh thu và số sách bán theo tháng'
+          }
+        },
+        scales: {
+          y1: {
+            type: 'linear',
+            position: 'left',
+            beginAtZero: true,
+            title: { display: true, text: 'Doanh thu (VND)' },
+            ticks: {
+              callback: value => new Intl.NumberFormat().format(value)
+            }
+          },
+          y2: {
+            type: 'linear',
+            position: 'right',
+            beginAtZero: true,
+            title: { display: true, text: 'Số sách bán' },
+            grid: { drawOnChartArea: false }
+          }
+        }
+      }
+    });
+  };
+
+  $(document).ready(function() {
+    function fetchAndRenderChart(from, to) {
+      $.ajax({
+        url: '{{ route('admin.dashboard.ajax_data') }}',
+        method: 'GET',
+        data: { from: from, to: to },
+        success: function(data) {
+          revenueChart.data.labels = data.labels;
+          revenueChart.data.datasets[0].data = data.values;
+          revenueChart.data.datasets[1].data = data.soLuong;
+          revenueChart.update();
+        },
+        error: function() {
+          alert('Lỗi khi lấy dữ liệu biểu đồ');
+        }
+      });
+    }
+
+    $('input[name=from], input[name=to]').on('change', function () {
+      const from = $('input[name=from]').val();
+      const to = $('input[name=to]').val();
+      if (from && to) fetchAndRenderChart(from, to);
+    });
+  });
+</script>
 <script>
   const bookLabels = @json($bookLabels);
   const bookCounts = @json($bookCounts);
@@ -144,70 +246,6 @@
       }
     }
   });
-</script>
-
-<script>
-  window.onload = function () {
-    const labels = @json($labels);
-    const values = @json($values);
-    const soLuong = @json($soLuongSachTheoThang);
-
-    const ctx = document.getElementById('revenueChart').getContext('2d');
-    new Chart(ctx, {
-    data: {
-        labels: labels,
-        datasets: [
-        {
-            type: 'bar',
-            label: 'Doanh thu (VND)',
-            data: values,
-            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1,
-            yAxisID: 'y1',
-        },
-        {
-            type: 'line',
-            label: 'Số lượng sách bán',
-            data: soLuong,
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            fill: false,
-            tension: 0.3,
-            yAxisID: 'y2',
-        }
-        ]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-        title: {
-            display: true,
-            text: 'Doanh thu và số sách bán theo tháng'
-        }
-        },
-        scales: {
-        y1: {
-            type: 'linear',
-            position: 'left',
-            beginAtZero: true,
-            title: { display: true, text: 'Doanh thu (VND)' },
-            ticks: {
-            callback: value => new Intl.NumberFormat().format(value)
-            }
-        },
-        y2: {
-            type: 'linear',
-            position: 'right',
-            beginAtZero: true,
-            title: { display: true, text: 'Số sách bán' },
-            grid: { drawOnChartArea: false }
-        }
-        }
-    }
-    });
-
-  };
 </script>
 
 @endsection

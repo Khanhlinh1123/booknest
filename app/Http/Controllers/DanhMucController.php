@@ -21,7 +21,13 @@ class DanhMucController extends Controller
             ['value' => '300000-10000000', 'label' => 'Trên 300.000₫'],
         ];
 
-        $query = $danhmuc->sachs()->with('tacGia');
+        $query = $danhmuc->sachs()
+            ->with('tacGia')
+            ->withCount('danhGias') // số lượt đánh giá
+            ->withAvg('danhGias', 'soSao') // trung bình sao
+            ->with(['donHangs' => function ($q) {
+                $q->withPivot('soLuong');
+            }]);
         switch ($request->sort) {
             case 'newest':
                 $query->orderBy('created_at', 'desc');

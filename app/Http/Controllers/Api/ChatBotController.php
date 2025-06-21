@@ -133,15 +133,17 @@ class ChatBotController extends Controller
                 ]);
             }
 
-            $info = $km->map(fn($k) => "{$k->tenKM} ({$k->giaTri}% {$k->loaiGiam}) đến {$k->ketThuc->format('d/m')}")->join('; ');
-            return response()->json([
+            $info = $km->map(function ($k) {
+                $ngayHetHan = Carbon::parse($k->ketThuc)->format('d/m');
+                return "{$k->tenKM} ({$k->giaTri}% {$k->loaiGiam}) đến $ngayHetHan";
+            })->join('; ');            return response()->json([
                 'fulfillmentText' => "Các chương trình khuyến mãi hiện có: $info"
             ]);
         }
 
         // ===== Mặc định =====
         return response()->json([
-            'fulfillmentText' => 'Xin lỗi, mình chưa hiểu yêu cầu. Bạn có thể hỏi về tên sách, thể loại hoặc tác giả nha!'
+            'fulfillmentText' => 'Xin lỗi, mình chưa hiểu yêu cầu của bạn.'
         ]);
     }
 }

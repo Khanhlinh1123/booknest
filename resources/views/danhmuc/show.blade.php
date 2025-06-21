@@ -68,6 +68,47 @@
 .breadcrumb a:hover {
     text-decoration: underline;
 }
+	.star-rating {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.stars {
+  letter-spacing: 2px;
+  font-family: Arial, sans-serif;
+  color: #ccc;
+}
+
+.stars.overlay {
+  color: #ffc107;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  width: var(--percent);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #dc3545;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 10;
+}
+
 
 </style>
 <div class="breadcrumb-banner d-flex align-items-center" style="
@@ -171,7 +212,16 @@
             @forelse($sachs as $sach)
                 <div class="col-md-3 mb-4">
                     <div class="product-item border rounded p-2 h-100">
-                        <figure class="product-style mb-2">
+                        <figure class="product-style position-relative mb-2">
+									{{-- Vòng tròn giảm giá --}}
+									@if($sach->giaDaGiam < $sach->giaGoc)
+										@php
+											$phanTram = round(100 * ($sach->giaGoc - $sach->giaDaGiam) / $sach->giaGoc);
+										@endphp
+										<div class="discount-badge">
+											- {{ $phanTram }}%
+										</div>
+									@endif
                             <a href="{{ route('sach.show', $sach->slug) }}">
                                 <img src="{{ asset('images/sach/' . $sach->hinhanh) }}" alt="{{ $sach->tenSach }}"
                                     class="img-fluid" style="height: 250px; object-fit: cover;">
@@ -181,7 +231,8 @@
 										<input type="hidden" name="maSach" value="{{ $sach->maSach }}">
 										<input type="hidden" name="soLuong" value="1">
 										<button type="submit" class="add-to-cart" data-product-tile="add-to-cart">Thêm vào giỏ</button>
-									</form>                        </figure>
+									</form>                        
+                        </figure>
                         <figcaption>
                             <h6>
                                 <a href="{{ route('sach.show', $sach->slug) }}" class="text-decoration-none text-dark" style="font-family: 'Times New Roman', Times, serif;">
@@ -189,14 +240,38 @@
                                 </a>
                             </h6>
                             <span class="text-muted">{{ $sach->tacGia->tenTG ?? 'Không rõ' }}</span>
-                            <div class="item-price mt-1">
-                                @if($sach->giaDaGiam < $sach->giaGoc)
-                                    <span class="text-decoration-line-through text-danger me-2">{{ number_format($sach->giaGoc) }}₫</span>
-                                    <span class="fw-bold text-success">{{ number_format($sach->giaDaGiam) }}₫</span>
-                                @else
-                                    <span class="fw-bold">{{ number_format($sach->giaGoc) }}₫</span>
-                                @endif
-                            </div>
+                                    {{-- Giá --}}
+									<div class="mt-1">
+										<span class="fw-bold text-danger" style="font-size: 18px;">
+										{{ number_format($sach->giaDaGiam) }}₫
+										</span>
+
+										@if($sach->giaDaGiam < $sach->giaGoc)
+										<span class="text-muted text-decoration-line-through ms-2">
+											{{ number_format($sach->giaGoc) }}₫
+										</span>
+
+										
+										@endif
+									</div>
+
+									{{-- Đánh giá + đã bán --}}
+									<div style="font-size: 14px; color: #666;" class="mt-2">
+									@if($sach->soDanhGia > 0)
+									@php
+										$rating = round($sach->trungBinhSao * 10) / 10; // ví dụ 4.2
+										$percentage = min(100, $rating / 5 * 100); // % tô vàng
+									@endphp
+
+									<div class="star-rating" style="--percent: {{ $percentage }}%">
+										<div class="stars base">★★★★★</div>
+										<div class="stars overlay">★★★★★</div>
+									</div>
+									<span class="ms-1 text-muted">({{ $sach->soDanhGia }})</span>
+									@endif
+									<span class="ms-2">| Đã bán {{ number_format($sach->soLuongDaBan) }}</span>
+									
+								</div>
                         </figcaption>
                     </div>
                 </div>
@@ -211,7 +286,7 @@
 </div>
     </div>
 </div>
-
+@include('footer');
 <script>
     document.querySelectorAll('#filterForm input[type=checkbox]').forEach(function(checkbox) {
         checkbox.addEventListener('change', function () {

@@ -25,23 +25,27 @@ class BaiVietController extends Controller
     {
         $data = $request->validate([
             'tieuDe' => 'required|string|max:255',
-            'tomTat' => 'nullable|string',
             'noiDung' => 'required',
             'anhBia' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'nguoi_dung_id' => 'required|exists:nguoidung,maND',
         ]);
+
+        // Thêm người dùng đang đăng nhập
+        $data['maND'] = auth()->user()->maND; // 👈 đúng với tên cột trong bảng
 
         if ($request->hasFile('anhBia')) {
             $file = $request->file('anhBia');
             $fileName = time().'_'.$file->getClientOriginalName();
             $file->move(public_path('images/baiviet'), $fileName);
-            $data['anhBia'] = $fileName;
+            // LƯU KÈM ĐƯỜNG DẪN
+            $data['anhBia'] = 'images/baiviet/' . $fileName;
         }
+
 
         BaiViet::create($data);
 
         return redirect()->route('admin.baiviet.index')->with('success', 'Đã thêm bài viết.');
     }
+
 
     public function edit($id)
     {
@@ -56,18 +60,22 @@ class BaiVietController extends Controller
 
         $data = $request->validate([
             'tieuDe' => 'required|string|max:255',
-            'tomTat' => 'nullable|string',
             'noiDung' => 'required',
             'anhBia' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'maND' => 'required|exists:nguoidung,maND',
         ]);
+                    $data['maND'] = auth()->user()->maND;
+
 
         if ($request->hasFile('anhBia')) {
             $file = $request->file('anhBia');
             $fileName = time().'_'.$file->getClientOriginalName();
             $file->move(public_path('images/baiviet'), $fileName);
-            $data['anhBia'] = $fileName;
+            $data['anhBia'] = 'images/baiviet/' . $fileName;
+        } else {
+            $data['anhBia'] = $baiviet->anhBia; // 👈 giữ nguyên ảnh cũ nếu không upload lại
         }
+
+
 
         $baiviet->update($data);
 
